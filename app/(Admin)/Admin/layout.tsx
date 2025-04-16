@@ -1,4 +1,4 @@
-import AdminAside from "@/Components/Admin/AdminAside/AdminAside";
+import AdminAside from "@/Components/Admin/AdminAside";
 import AdminContentWrapper from "@/Components/Admin/AdminContent/AdminContentWrapper";
 import AdminContextProvider from "@/Contexts/AdminContext";
 

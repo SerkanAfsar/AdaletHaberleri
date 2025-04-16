@@ -18,7 +18,8 @@ export default function AdminAside() {
         }
       }}
       className={cn(
-        "dark:bg-dark-mode flex w-auto shrink-0 grow-0 flex-col bg-white text-gray-700 transition-all dark:text-white",
+        "dark:bg-dark-mode flex w-[75px] shrink-0 grow-0 flex-col bg-white text-gray-700 transition-all dark:text-white",
+        isOpened && "w-[240px]",
       )}
     >
       <AdminTopSection
@@ -26,7 +27,14 @@ export default function AdminAside() {
           "flexCenter w-[101%] text-center text-lg font-bold transition-all",
         )}
       >
-        <span className={isOpened ? "block" : "hidden"}>
+        <span
+          className={cn(
+            "block transition-all duration-100",
+            isOpened
+              ? "visible opacity-100 duration-1000"
+              : "invisible opacity-0",
+          )}
+        >
           Adalet Haberleri
           <br /> Yönetim Paneli
         </span>

@@ -1,3 +1,7 @@
+import CategoryContainer from "./Containers/CategoryContainer";
+
 export default function Page() {
-  return <div>Categories</div>;
+  return <CategoryContainer />;
 }
+
+export const dynamic = "force-dynamic";

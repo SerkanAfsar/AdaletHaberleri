@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String
+  surname  String
+  password String
+  roles    Role[]
+}
+
+model Role {
+  id       Int      @id @default(autoincrement())
+  roleName String   @unique
+  claims   String[]
+  User     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId   Int?
+}
+
+model Category {
+  id                Int                 @id @default(autoincrement())
+  categoryName      String              @unique
+  seoTitle          String?
+  seoDescription    String?
+  subDescription    String?
+  queue             Int?
+  slugUrl           String?             @unique
+  Newses            News[]
+  CategorySourceUrl CategorySourceUrl[]
+
+  @@index([slugUrl])
+}
+
+model News {
+  id             Int      @id @default(autoincrement())
+  title          String   @unique
+  seoTitle       String?
+  seoDescription String?
+  subDescription String?
+  imageId        String?
+  content        String?
+  readedCount    Int
+  slugUrl        String
+  source         Sources?
+  sourceUrlLink  String?
+
+  Category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int?
+
+  @@index([slugUrl])
+}
+
+model CategorySourceUrl {
+  id         Int      @id @default(autoincrement())
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+  sourceUrl  String
+  source     Sources
+}
+
+enum Sources {
+  HUKUKIHABER
+  ADALETBIZ
+  ADALETMEDYA
+}

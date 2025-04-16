@@ -19,6 +19,7 @@
   --color-gray-800: #1d2939;
   --color-gray-900: #101828;
   --color-dark-mode: #101828;
+  --color-dark-table: #1e2636;
   --font-outfit: var(--font-outfit);
 
   /* --font-sans: var(--font-geist-sans);
@@ -41,4 +42,8 @@ body {
 
 @utility flexCenter {
   @apply flex items-center justify-center;
+}
+
+@utilty commonBorder {
+  @apply border border-gray-200 dark:border-gray-800;
 }

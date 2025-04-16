@@ -1,6 +1,6 @@
 "use client";
 import { Logs, Search } from "lucide-react";
-import CustomTextBox from "../../UI/CustomTextBox";
+import CustomTextBox from "../../UI/CustomInput";
 import { useAdminContext } from "@/Contexts/AdminContext";
 
 export default function AdminTopSearch() {
@@ -9,7 +9,7 @@ export default function AdminTopSearch() {
   return (
     <div className="flexCenter gap-3">
       <div onClick={() => setRegisteredOpened((val) => !val)}>
-        <div className="ml-1 flex cursor-pointer items-center justify-center rounded-md bg-slate-50 p-1">
+        <div className="ml-1 flex cursor-pointer items-center justify-center rounded-md bg-slate-50 p-2">
           <Logs />
         </div>
       </div>

@@ -1,13 +1,13 @@
 import { cn } from "@/Utils";
 import React from "react";
 
-export type CustomTextBoxProps = {
+export type CustomInputProps = {
   title?: string;
   icon?: React.ReactNode;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-const CustomTextBox = React.forwardRef<HTMLInputElement, CustomTextBoxProps>(
-  ({ className, icon, ...rest }, ref) => {
+const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(
+  ({ className, value, onChange, icon, ...rest }, ref) => {
     return (
       <div className="relative">
         {icon && (
@@ -17,18 +17,20 @@ const CustomTextBox = React.forwardRef<HTMLInputElement, CustomTextBoxProps>(
         )}
         <input
           type="text"
-          {...rest}
           ref={ref}
           className={cn(
-            "flex rounded border border-gray-400 px-3 py-2 text-sm text-black placeholder:text-gray-400",
+            "dark:focus:border-brand-800 flex rounded border border-gray-400 px-3 py-2 text-sm text-black outline-none placeholder:text-gray-400 dark:border-gray-800 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30",
             className,
             icon && "pl-10",
           )}
+          value={value}
+          onChange={onChange}
+          {...rest}
         />
       </div>
     );
   },
 );
-CustomTextBox.displayName = "CustomTextBox";
+CustomInput.displayName = "CustomTextBox";
 
-export default CustomTextBox;
+export default CustomInput;
