@@ -16,7 +16,7 @@ export default function AdminTopSearch() {
       <CustomTextBox
         icon={<Search />}
         className="w-96 py-2"
-        placeholder="Aramak Yapınız..."
+        placeholder="Arama Yapınız..."
       />
     </div>
   );

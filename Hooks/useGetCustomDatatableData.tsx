@@ -26,13 +26,12 @@ export default function useGetCustomDatatableData<T extends object>({
 }: CustomGetValuesType) {
   const [data, setData] = useState<T[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
-  const [errMessage, setErrMessage] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [rowCount, setRowCount] = useState(0);
+  const [errMessage, setErrMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [rowCount, setRowCount] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
       const url = new URL(fetchUrl, process.env.NEXT_PUBLIC_BASE_URL!);
       url.searchParams.set(
         "offset",
@@ -56,14 +55,6 @@ export default function useGetCustomDatatableData<T extends object>({
         }
       } catch {
         setIsError(true);
-        // let err = "";
-        // if (error instanceof Error) {
-        //   err = error.message;
-        // } else if (typeof error == "string") {
-        //   err = error;
-        // } else {
-        //   err = "Something went wrong";
-        // }
         setErrMessage("Something went wrong");
       } finally {
         setIsLoading(false);

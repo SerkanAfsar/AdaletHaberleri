@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +20,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${outFitFont.variable} antialiased`}>{children}</body>
+      <body className={`${outFitFont.variable} antialiased`}>
+        {children}
+        <ToastContainer />
+        <NextTopLoader
+          color="#2299DD"
+          height={3}
+          showSpinner={true}
+          zIndex={1600}
+        />
+      </body>
     </html>
   );
 }

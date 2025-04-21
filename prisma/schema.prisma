@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
@@ -23,11 +23,18 @@ model User {
 }
 
 model Role {
-  id       Int      @id @default(autoincrement())
-  roleName String   @unique
-  claims   String[]
-  User     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id       Int     @id @default(autoincrement())
+  roleName String  @unique
+  claims   Claim[]
+  User     User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId   Int?
+}
+
+model Claim {
+  id        Int    @id @default(autoincrement())
+  claimName String
+  Role      Role?  @relation(fields: [roleId], references: [id])
+  roleId    Int?
 }
 
 model Category {
@@ -45,8 +52,8 @@ model Category {
 }
 
 model News {
-  id             Int      @id @default(autoincrement())
-  title          String   @unique
+  id             Int     @id @default(autoincrement())
+  title          String  @unique
   seoTitle       String?
   seoDescription String?
   subDescription String?
@@ -54,7 +61,7 @@ model News {
   content        String?
   readedCount    Int
   slugUrl        String
-  source         Sources?
+  source         String
   sourceUrlLink  String?
 
   Category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -68,11 +75,11 @@ model CategorySourceUrl {
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
   sourceUrl  String
-  source     Sources
+  source     String
 }
 
-enum Sources {
-  HUKUKIHABER
-  ADALETBIZ
-  ADALETMEDYA
-}
+// enum Sources {
+//   HUKUKIHABER
+//   ADALETBIZ
+//   ADALETMEDYA
+// }

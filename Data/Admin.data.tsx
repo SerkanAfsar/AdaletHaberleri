@@ -1,4 +1,8 @@
-import { AdminMenuLinkType, AdminMenuType } from "@/Types/Admin.types";
+import {
+  AdminMenuLinkType,
+  AdminMenuType,
+  CustomOptionType,
+} from "@/Types/Admin.types";
 import {
   ChartColumnStacked,
   LayoutDashboard,
@@ -15,7 +19,7 @@ export const AdminUrlList: Record<string, AdminMenuLinkType> = {
   Haberler: "/Admin/News",
   HaberEkle: `/Admin/AddNews`,
   Cikis: `/Admin/Exit`,
-};
+} as const;
 
 export const AdmiMenuList: AdminMenuType[] = [
   {
@@ -51,3 +55,15 @@ export const AdmiMenuList: AdminMenuType[] = [
     isFunc: true,
   },
 ];
+
+export const SourceList: Record<string, string> = {
+  HUKUKIHABER: "HUKUKI HABER",
+  ADALETBIZ: "ADALET BİZ",
+} as const;
+
+export const SourceListOptionValues: CustomOptionType[] = Object.keys(
+  SourceList,
+).map((item) => ({
+  title: item,
+  value: SourceList[item],
+}));

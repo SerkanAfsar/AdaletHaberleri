@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 export default function AdminMenuList() {
   const { isOpened } = useAdminContext();
   const pathName = usePathname();
-  console.log("rendered");
+
   return (
     <nav className="block w-full flex-auto overflow-x-auto overscroll-contain pb-3">
       <ul className="flex h-full w-full flex-col gap-3 px-3">

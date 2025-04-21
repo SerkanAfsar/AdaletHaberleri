@@ -1,15 +1,18 @@
 "use client";
-
 import CustomDataTable from "@/Components/Admin/CustomDatatable";
 import EditCell from "@/Components/Admin/CustomDatatable/EditCell";
-import { Category } from "@prisma/client";
+import { Category, CategorySourceUrl } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import CustomCategoryEditModal from "../Components/CustomCategoryEditModal";
-import AddCategoryModalComponent from "../Components/AddCategoryModalComponent";
+import AddCategoryUrlModalComponent from "../Components/AddCategoryUrlModalComponent";
+import { SourceList } from "@/Data/Admin.data";
 
-export default function CategoryContainer() {
-  const cols = useMemo<ColumnDef<Category>[]>(
+export type CategoryUrlListType = CategorySourceUrl & {
+  category: Category;
+};
+
+export default function CategoryUrlListContainer() {
+  const cols = useMemo<ColumnDef<CategoryUrlListType>[]>(
     () => [
       {
         accessorKey: "id",
@@ -25,25 +28,34 @@ export default function CategoryContainer() {
         },
       },
       {
-        accessorKey: "categoryName",
-        header: "Kategori Adı",
+        accessorKey: "sourceUrl",
+        header: "Source url",
         cell: ({ row }) => (
-          <div className="capitalize">{row.getValue("categoryName")}</div>
+          <div className="capitalize">{row.getValue("sourceUrl")}</div>
+        ),
+        enableSorting: true,
+        enableHiding: true,
+        enableGlobalFilter: false,
+        enableColumnFilter: false,
+      },
+      {
+        accessorKey: "source",
+        header: "KAYNAK",
+        cell: ({ row }) => (
+          <div className="capitalize">
+            {SourceList[row.getValue("source") as string]}
+          </div>
         ),
         enableSorting: true,
         enableHiding: true,
         enableGlobalFilter: true,
       },
       {
-        accessorKey: "slugUrl",
-        header: "Seo Url",
-        cell: ({ row }) => (
-          <div className="capitalize">{row.getValue("slugUrl")}</div>
-        ),
+        accessorKey: "category.categoryName",
+        header: "Kategori",
         enableSorting: true,
         enableHiding: true,
-        enableGlobalFilter: false,
-        enableColumnFilter: false,
+        enableGlobalFilter: true,
       },
 
       {
@@ -53,8 +65,8 @@ export default function CategoryContainer() {
         cell: (cellContext) => (
           <EditCell
             cellContext={cellContext}
-            fetchUrl="/api/categories"
-            ModalComponent={CustomCategoryEditModal}
+            fetchUrl="/api/categoryurl"
+            // ModalComponent={}
           />
         ),
         meta: {
@@ -71,9 +83,9 @@ export default function CategoryContainer() {
   return (
     <CustomDataTable
       columns={cols}
-      AddModalComponent={AddCategoryModalComponent}
-      fetchUrl="/api/categories"
-      title="Kategori"
+      AddModalComponent={AddCategoryUrlModalComponent}
+      fetchUrl="/api/categoryurl"
+      title="Kategori Url"
     />
   );
 }

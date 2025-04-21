@@ -1,4 +1,5 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { CellContext, ColumnDef } from "@tanstack/react-table";
+import { ComponentType } from "react";
 
 export type AdminMenuType = {
   title: string;
@@ -12,9 +13,8 @@ export type AdminMenuLinkType = `/Admin/${string}`;
 export type DataTableProps<T extends object> = {
   columns: ColumnDef<T>[];
   fetchUrl: string;
-  // deleteApi: (val: ApiActionType) => void;
-  // getByIdApi: (id: number) => Promise<ResponseResult<T>>;
-  // addItem?: React.ReactNode;
+  AddModalComponent: ComponentType<ModalComponentType<T>>;
+  title: string;
 };
 
 export type ResponseResult<T> = {
@@ -23,4 +23,24 @@ export type ResponseResult<T> = {
   error?: string | null;
   statusCode?: number;
   totalCount?: number;
+};
+
+export type ModalComponentType<T> = {
+  item?: T;
+  setItem?: React.Dispatch<React.SetStateAction<T | undefined>>;
+  setIsOpened?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsUpdated:
+    | (() => React.Dispatch<React.SetStateAction<boolean>>)
+    | React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type EditCellType<T, V> = {
+  cellContext: CellContext<T, V>;
+  fetchUrl: string;
+  ModalComponent: React.ComponentType<ModalComponentType<T>>;
+};
+
+export type CustomOptionType = {
+  title: string;
+  value: string;
 };

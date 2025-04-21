@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomInput, { CustomInputProps } from "./CustomInput";
 
 export type CustomDebouncedInputProps = Omit<
@@ -26,18 +26,27 @@ const CustomDebouncedInput = React.forwardRef<
   ) => {
     const [value, setValue] = useState<string | number>(initialValue ?? "");
 
+    const timeoutRef = useRef<any>(null);
+
     useEffect(() => {
-      const timer = setTimeout(() => {
-        customChange(value);
+      setValue(initialValue as string);
+    }, [initialValue]);
+
+    const handleChange = (e: any) => {
+      const newValue = e.target.value;
+      setValue(newValue);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+      timeoutRef.current = setTimeout(() => {
+        customChange(newValue);
       }, delay);
-      return () => clearTimeout(timer);
-    }, [value]);
+    };
 
     return (
       <CustomInput
         ref={ref}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => handleChange(e)}
         {...rest}
       />
     );

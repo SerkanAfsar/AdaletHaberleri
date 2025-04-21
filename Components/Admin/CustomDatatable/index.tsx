@@ -14,12 +14,20 @@ import React, { useState } from "react";
 
 import useGetCustomDatatableData from "@/Hooks/useGetCustomDatatableData";
 import { DataTableProps } from "@/Types";
+import CustomDebouncedInput from "@/Components/UI/CustomDebouncedInput";
+import { Search, SortAsc, SortDesc } from "lucide-react";
+import ReactPaginate from "react-paginate";
+import { cn } from "@/Utils";
 
 export default function CustomDataTable<T extends object>({
   columns,
   fetchUrl,
+  AddModalComponent,
+  title,
 }: DataTableProps<T>) {
   const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [addModalOpened, setAddModalOpened] = useState<boolean>(false);
+  const [isChanged, setIsChanged] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -29,8 +37,11 @@ export default function CustomDataTable<T extends object>({
     [],
   );
 
+  console.log(sorting);
+
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
+
   const [rowSelection, setRowSelection] = React.useState({});
 
   const { data, isError, rowCount, isLoading, errMessage } =
@@ -40,7 +51,7 @@ export default function CustomDataTable<T extends object>({
       globalFilter,
       pagination,
       sorting,
-      //   isChanged: isUpdated,
+      isChanged,
     });
 
   const table = useReactTable({
@@ -67,15 +78,11 @@ export default function CustomDataTable<T extends object>({
       pagination,
       globalFilter,
     },
-    // meta: {
-    //   deleteFunc: async (id: number) => {
-    //     await deleteApi({ id, setIsUpdated });
-    //   },
-    //   getByIdFunc: async (id: number) => {
-    //     return await getByIdApi(id);
-    //   },
-    //   setIsUpdated,
-    // },
+    meta: {
+      setIsUpdated: () => {
+        setIsChanged(!isChanged);
+      },
+    },
   });
 
   //   if (isError) {
@@ -87,48 +94,157 @@ export default function CustomDataTable<T extends object>({
   //       </Alert>
   //     );
   //   }
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+
   if (isError) {
     return <div>{errMessage}</div>;
   }
 
   return (
-    <table className="dark:bg-dark-table w-full table-auto border-collapse rounded-md border border-gray-400">
-      <thead>
-        {table.getHeaderGroups().map((headerGroup: any) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header: any) => (
-              <th
-                key={header.id}
-                className="border border-gray-300 p-3 text-left dark:border-white/[0.05]"
-              >
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-              </th>
+    <>
+      {addModalOpened && (
+        <AddModalComponent
+          setIsUpdated={setIsChanged}
+          setIsOpened={setAddModalOpened}
+        />
+      )}
+
+      <div className="flex w-full flex-col gap-3">
+        <div className="flex w-full items-end justify-between gap-3">
+          <div className="flex items-center justify-center gap-3">
+            <b>Gösterim</b>
+            <select
+              className="min-w-20 rounded-md border border-gray-400 px-3 py-2"
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => {
+                table.setPageSize(Number(e.target.value));
+              }}
+            >
+              {[10, 20, 30, 50].map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-3">
+            <button
+              type="button"
+              className="w-full rounded-md bg-blue-500 p-2 text-white dark:bg-blue-900"
+              onClick={() => setAddModalOpened(true)}
+            >
+              Yeni {title} Ekle
+            </button>
+            <CustomDebouncedInput
+              className="inline-flex w-40 self-end"
+              icon={<Search />}
+              placeholder="Arama Yapınız"
+              value={globalFilter}
+              onChange={(val) => {
+                table.setGlobalFilter(val);
+                table.setPageIndex(0);
+              }}
+            />
+          </div>
+        </div>
+        <table className="dark:bg-dark-table w-full table-auto border-collapse rounded-md border border-gray-400">
+          <thead>
+            {table.getHeaderGroups().map((headerGroup: any) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header: any) => {
+                  const isSorted = header.column.getIsSorted();
+
+                  return (
+                    <th
+                      onClick={header.column.getToggleSortingHandler()}
+                      key={header.id}
+                      className={cn(
+                        "border border-gray-300 p-3 text-left dark:border-white/[0.05]",
+                        header.column.getCanSort() && "cursor-pointer",
+                      )}
+                      style={{ width: header.column.columnDef.meta?.width }}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                      <span className="ml-1 inline-block">
+                        {isSorted === "asc" && <SortAsc size={15} />}
+                        {isSorted === "desc" && <SortDesc size={15} />}
+                      </span>
+                    </th>
+                  );
+                })}
+              </tr>
             ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td
-                key={cell.id}
-                className="border border-gray-300 p-3 text-left dark:border-white/[0.05]"
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+          </thead>
+          {isLoading ? (
+            <TableLoadingSkeleton
+              rows={10}
+              columns={table.getAllColumns().length}
+            />
+          ) : (
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="border border-gray-300 p-3 text-left dark:border-white/[0.05]"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          )}
+        </table>
+      </div>
+
+      <div>
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel="Sonraki >"
+          onPageChange={(e) => table.setPageIndex(Number(e.selected))}
+          pageRangeDisplayed={5}
+          pageCount={Math.ceil(
+            Number(rowCount) / Number(table.getState().pagination.pageSize),
+          )}
+          forcePage={table.getState().pagination.pageIndex}
+          previousLabel="< Önceki"
+          renderOnZeroPageCount={null}
+          containerClassName="flex justify-end text-sm space-x-2 mt-4"
+          pageClassName=" border border-gray-300 w-8 cursor-pointer text-center rounded-md "
+          activeClassName="bg-black text-white"
+          pageLinkClassName="block w-full h-full  px-3 py-2"
+          previousClassName="bg-gray-100 cursor-pointer border border-gray-300 rounded-md px-3 py-2 hover:bg-gray-200 transition"
+          nextClassName="bg-gray-100 border border-gray-300 rounded-md px-3 py-2 hover:bg-gray-200 transition"
+          nextLinkClassName="block cursor-pointer w-full h-full"
+          breakClassName="px-3 py-2"
+          disabledClassName="opacity-50 cursor-not-allowed"
+        />
+      </div>
+    </>
   );
 }
+
+const TableLoadingSkeleton = ({ rows = 5, columns = 4 }) => {
+  return (
+    <tbody>
+      {[...Array(rows)].map((_, rowIndex) => (
+        <tr key={rowIndex} className="animate-pulse">
+          {[...Array(columns)].map((_, colIndex) => (
+            <td key={colIndex} className="p-4">
+              <div className="h-4 w-full rounded bg-gray-300"></div>
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  );
+};

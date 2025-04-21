@@ -1,3 +1,5 @@
+import CategoryUrlListContainer from "./Containers/CategoryUrlListContainer";
+
 export default function Page() {
-  return <div>Categories</div>;
+  return <CategoryUrlListContainer />;
 }
