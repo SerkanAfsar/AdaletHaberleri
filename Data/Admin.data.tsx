@@ -56,14 +56,16 @@ export const AdmiMenuList: AdminMenuType[] = [
   },
 ];
 
-export const SourceList: Record<string, string> = {
-  HUKUKIHABER: "HUKUKI HABER",
-  ADALETBIZ: "ADALET BİZ",
+export const SourceList: Record<string, { name: string; selector: string }> = {
+  HUKUKIHABER: { name: "HUKUKI HABER", selector: ".card.border-0.h-100 a" },
+  ADALETBIZ: { name: "ADALET BİZ", selector: "" },
 } as const;
+
+// .card.border-0.h-100 a
 
 export const SourceListOptionValues: CustomOptionType[] = Object.keys(
   SourceList,
 ).map((item) => ({
   title: item,
-  value: SourceList[item],
+  value: SourceList[item].name,
 }));

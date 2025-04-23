@@ -1,4 +1,7 @@
-import { GetAllCategoryUrlService } from "@/Services/CategoryUrl.service";
+import {
+  AddCategoryUrlService,
+  GetAllCategoryUrlService,
+} from "@/Services/CategoryUrl.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -16,6 +19,12 @@ export async function GET(req: NextRequest) {
     filters: filters ?? "",
   });
 
+  return NextResponse.json(result, { status: result.statusCode });
+}
+
+export async function POST(req: NextRequest) {
+  const data = await req.json();
+  const result = await AddCategoryUrlService({ data });
   return NextResponse.json(result, { status: result.statusCode });
 }
 

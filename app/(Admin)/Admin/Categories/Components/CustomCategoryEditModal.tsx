@@ -1,5 +1,5 @@
 import CustomInput from "@/Components/UI/CustomInput";
-import { ResponseResult } from "@/Types";
+import { ModalComponentType, ResponseResult } from "@/Types";
 import { slugUrl } from "@/Utils";
 import { Category } from "@prisma/client";
 import { useEffect } from "react";
@@ -26,8 +26,7 @@ export default function CustomCategoryEditModal({
   }, [categoryName, setValue]);
 
   const onSubmit: SubmitHandler<Category> = async (data) => {
-    console.log(errors);
-    const response = await fetch(`/api/categories/${item.id}`, {
+    const response = await fetch(`/api/categories/${item?.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -37,7 +36,7 @@ export default function CustomCategoryEditModal({
     const result: ResponseResult<Category> = await response.json();
     if (result.success) {
       setItem && setItem(undefined);
-      setIsUpdated();
+      setIsUpdated((prev) => !prev);
       return toast.success("Güncelleme Başarılı", { position: "top-right" });
     } else {
       return toast.error(result.error, { position: "top-right" });

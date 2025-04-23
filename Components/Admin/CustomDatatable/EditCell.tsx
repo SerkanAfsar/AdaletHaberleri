@@ -1,7 +1,7 @@
 import { File, Trash } from "lucide-react";
 import { CellContext } from "@tanstack/react-table";
 import React, { useCallback, useState } from "react";
-import { ResponseResult } from "@/Types";
+import { EditCellType, ResponseResult } from "@/Types";
 import { toast } from "react-toastify";
 import { Category } from "@prisma/client";
 import { useTopLoader } from "nextjs-toploader";
@@ -19,6 +19,7 @@ export default function EditCell<T, V>({
   const { id } = cell.row.original as any;
 
   const { setIsUpdated } = table.options.meta as any;
+  const { customList } = cell.column.columnDef.meta as any;
 
   const handleClick = useCallback(async ({ id }: { id: number }) => {
     loader.start();
@@ -57,7 +58,7 @@ export default function EditCell<T, V>({
       setItem(undefined);
       setIsUpdated();
 
-      toast.success(`${(result.data as Category).categoryName} Silindi`, {
+      toast.success(`Veri Silindi`, {
         position: "top-right",
       });
     } else {
@@ -85,6 +86,7 @@ export default function EditCell<T, V>({
           item={item}
           setItem={setItem}
           setIsUpdated={setIsUpdated}
+          customList={customList}
         />
       ) : null}
     </>

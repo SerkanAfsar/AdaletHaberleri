@@ -15,6 +15,7 @@ export type DataTableProps<T extends object> = {
   fetchUrl: string;
   AddModalComponent: ComponentType<ModalComponentType<T>>;
   title: string;
+  customList?: CustomOptionType[];
 };
 
 export type ResponseResult<T> = {
@@ -23,6 +24,7 @@ export type ResponseResult<T> = {
   error?: string | null;
   statusCode?: number;
   totalCount?: number;
+  message?: string;
 };
 
 export type ModalComponentType<T> = {
@@ -32,6 +34,7 @@ export type ModalComponentType<T> = {
   setIsUpdated:
     | (() => React.Dispatch<React.SetStateAction<boolean>>)
     | React.Dispatch<React.SetStateAction<boolean>>;
+  customList?: CustomOptionType[];
 };
 
 export type EditCellType<T, V> = {

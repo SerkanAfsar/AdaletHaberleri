@@ -6,12 +6,18 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import AddCategoryUrlModalComponent from "../Components/AddCategoryUrlModalComponent";
 import { SourceList } from "@/Data/Admin.data";
+import { CustomOptionType } from "@/Types";
+import CustomCategorUrlListEditModal from "../Components/CustomCategorUrlListEditModal";
 
 export type CategoryUrlListType = CategorySourceUrl & {
   category: Category;
 };
 
-export default function CategoryUrlListContainer() {
+export default function CategoryUrlListContainer({
+  categoryList,
+}: {
+  categoryList: CustomOptionType[];
+}) {
   const cols = useMemo<ColumnDef<CategoryUrlListType>[]>(
     () => [
       {
@@ -30,9 +36,7 @@ export default function CategoryUrlListContainer() {
       {
         accessorKey: "sourceUrl",
         header: "Source url",
-        cell: ({ row }) => (
-          <div className="capitalize">{row.getValue("sourceUrl")}</div>
-        ),
+        cell: ({ row }) => <div>{row.getValue("sourceUrl")}</div>,
         enableSorting: true,
         enableHiding: true,
         enableGlobalFilter: false,
@@ -42,9 +46,7 @@ export default function CategoryUrlListContainer() {
         accessorKey: "source",
         header: "KAYNAK",
         cell: ({ row }) => (
-          <div className="capitalize">
-            {SourceList[row.getValue("source") as string]}
-          </div>
+          <div>{SourceList[row.getValue("source") as string].name}</div>
         ),
         enableSorting: true,
         enableHiding: true,
@@ -66,11 +68,12 @@ export default function CategoryUrlListContainer() {
           <EditCell
             cellContext={cellContext}
             fetchUrl="/api/categoryurl"
-            // ModalComponent={}
+            ModalComponent={CustomCategorUrlListEditModal}
           />
         ),
         meta: {
           width: 90,
+          customList: categoryList,
         },
         enableGlobalFilter: false,
         enableSorting: false,
@@ -86,6 +89,7 @@ export default function CategoryUrlListContainer() {
       AddModalComponent={AddCategoryUrlModalComponent}
       fetchUrl="/api/categoryurl"
       title="Kategori Url"
+      customList={categoryList}
     />
   );
 }

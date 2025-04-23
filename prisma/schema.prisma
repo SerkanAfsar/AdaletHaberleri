@@ -55,10 +55,10 @@ model News {
   id             Int     @id @default(autoincrement())
   title          String  @unique
   seoTitle       String?
-  seoDescription String?
-  subDescription String?
+  seoDescription String? @db.Text
+  subDescription String? @db.Text
   imageId        String?
-  content        String?
+  content        String? @db.Text
   readedCount    Int
   slugUrl        String
   source         String

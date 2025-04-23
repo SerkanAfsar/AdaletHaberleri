@@ -151,12 +151,14 @@ export async function UpdateCategoryWithIdService({
     if (!entity) {
       throw new Error(`Category with Id ${id} Not Found`);
     }
+
+    const { id: entityId, ...rest } = category;
     const responseResult: ResponseResult<Category> = {
       data: await prisma.category.update({
         where: {
           id,
         },
-        data: category,
+        data: rest,
       }),
       error: null,
       statusCode: 200,
@@ -205,6 +207,25 @@ export const AddCategoryService = async ({ data }: { data: Category }) => {
       statusCode: 200,
       success: true,
       totalCount: 1,
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler(error);
+  }
+};
+
+export const GetAllCategoriesListService = async () => {
+  try {
+    const responseResult: ResponseResult<Category> = {
+      success: true,
+      statusCode: 200,
+      data: await prisma.category.findMany({
+        orderBy: {
+          id: "asc",
+        },
+      }),
+      error: null,
+      totalCount: await prisma.category.count(),
     };
     return responseResult;
   } catch (error: unknown) {

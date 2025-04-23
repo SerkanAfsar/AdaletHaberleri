@@ -2,7 +2,7 @@ import { CategoryUrlListType } from "@/app/(Admin)/Admin/CategoryUrlList/Contain
 import { ResponseResult } from "@/Types";
 import { errorHandler } from "@/Utils";
 import prisma from "@/Utils/db";
-import { Prisma } from "@prisma/client";
+import { CategorySourceUrl, Prisma } from "@prisma/client";
 import { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 
 export async function GetAllCategoryUrlService({
@@ -127,6 +127,108 @@ export async function GetAllCategoryUrlService({
 
     responseResult.data = categories as CategoryUrlListType[];
     responseResult.totalCount = rowCount;
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler(error);
+  }
+}
+
+export const AddCategoryUrlService = async ({
+  data,
+}: {
+  data: CategorySourceUrl;
+}) => {
+  try {
+    const responseResult: ResponseResult<CategorySourceUrl> = {
+      data: await prisma.categorySourceUrl.create({ data }),
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: 1,
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler(error);
+  }
+};
+
+export async function DeleteCategoryUrlByIdService({ id }: { id: number }) {
+  try {
+    const entity = await prisma.categorySourceUrl.findFirst({
+      where: {
+        id,
+      },
+    });
+    if (!entity) {
+      throw new Error(`Category Url Source with ${id} Not Found`);
+    }
+
+    const responseResult: ResponseResult<CategorySourceUrl> = {
+      data: await prisma.categorySourceUrl.delete({
+        where: {
+          id,
+        },
+      }),
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: await prisma.categorySourceUrl.count(),
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler(error);
+  }
+}
+
+export async function GetCategoryUrlByIdService({ id }: { id: number }) {
+  try {
+    const responseResult: ResponseResult<CategorySourceUrl> = {
+      data: await prisma.categorySourceUrl.findFirst({
+        where: {
+          id,
+        },
+      }),
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: await prisma.category.count(),
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler(error);
+  }
+}
+
+export async function UpdateCategorySourceUrl({
+  id,
+  categorySource,
+}: {
+  id: number;
+  categorySource: CategorySourceUrl;
+}) {
+  try {
+    const entity = await prisma.categorySourceUrl.findFirst({
+      where: {
+        id,
+      },
+    });
+    if (!entity) {
+      throw new Error(`Category Source Url with Id ${id} Not Found`);
+    }
+
+    const { id: entityId, ...rest } = categorySource;
+    const responseResult: ResponseResult<CategorySourceUrl> = {
+      data: await prisma.categorySourceUrl.update({
+        where: {
+          id,
+        },
+        data: rest,
+      }),
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: await prisma.categorySourceUrl.count(),
+    };
     return responseResult;
   } catch (error: unknown) {
     return errorHandler(error);

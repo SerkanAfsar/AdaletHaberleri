@@ -1,4 +1,4 @@
-import { ResponseResult } from "@/Types";
+import { CustomOptionType, ResponseResult } from "@/Types";
 import { clsx, type ClassValue } from "clsx";
 import slugify from "slugify";
 import { twMerge } from "tailwind-merge";
@@ -50,4 +50,19 @@ export const checkIfCategoryNameExists = async (value: string) => {
     },
   });
   return !!entity;
+};
+
+export const ConvertToCustomOptions = <
+  T extends object,
+  KeyField extends keyof T,
+  ValueField extends keyof T,
+>(
+  data: T[],
+  fieldOne: KeyField,
+  fieldTwo: ValueField,
+): CustomOptionType[] => {
+  return data.map((item) => ({
+    title: item[fieldOne] as string,
+    value: item[fieldTwo] as string,
+  }));
 };

@@ -24,6 +24,7 @@ export default function CustomDataTable<T extends object>({
   fetchUrl,
   AddModalComponent,
   title,
+  customList,
 }: DataTableProps<T>) {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [addModalOpened, setAddModalOpened] = useState<boolean>(false);
@@ -36,8 +37,6 @@ export default function CustomDataTable<T extends object>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-
-  console.log(sorting);
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -105,6 +104,7 @@ export default function CustomDataTable<T extends object>({
         <AddModalComponent
           setIsUpdated={setIsChanged}
           setIsOpened={setAddModalOpened}
+          customList={customList}
         />
       )}
 
@@ -129,7 +129,7 @@ export default function CustomDataTable<T extends object>({
           <div className="flex flex-col items-center justify-center gap-3">
             <button
               type="button"
-              className="w-full rounded-md bg-blue-500 p-2 text-white dark:bg-blue-900"
+              className="w-full cursor-pointer rounded-md bg-blue-500 p-2 text-white dark:bg-blue-900"
               onClick={() => setAddModalOpened(true)}
             >
               Yeni {title} Ekle

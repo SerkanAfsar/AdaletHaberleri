@@ -22,9 +22,10 @@ const fetchCategoryName = async (value: string): Promise<boolean> => {
   const result = await response.json();
   return result;
 };
-export default function AddCategoryUrlModalComponent({
+export default function CustomCategorUrlListEditModal({
+  item,
+  setItem,
   setIsUpdated,
-  setIsOpened,
   customList,
 }: ModalComponentType<CategoryUrlListType>) {
   const {
@@ -35,19 +36,12 @@ export default function AddCategoryUrlModalComponent({
     formState: { errors },
   } = useForm<CategoryUrlListType>({
     mode: "onChange",
+    defaultValues: item,
   });
 
-  console.log(customList);
-
-  // const categoryName = watch("categoryName");
-
-  //   useEffect(() => {
-  //     setValue("slugUrl", slugUrl(categoryName));
-  //   }, [categoryName, setValue]);
-
   const onSubmit: SubmitHandler<CategorySourceUrl> = async (data) => {
-    const response = await fetch(`/api/categoryurl`, {
-      method: "POST",
+    const response = await fetch(`/api/categoryurl/${item?.id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
@@ -55,12 +49,9 @@ export default function AddCategoryUrlModalComponent({
     });
     const result: ResponseResult<CategorySourceUrl> = await response.json();
     if (result.success) {
-      setIsOpened && setIsOpened(false);
+      setItem && setItem(undefined);
       setIsUpdated((prev) => !prev);
-      return toast.success(
-        `${(result.data as CategorySourceUrl).sourceUrl} Eklendi`,
-        { position: "top-right" },
-      );
+      return toast.success("Güncelleme Başarılı", { position: "top-right" });
     } else {
       return toast.error(result.error, { position: "top-right" });
     }
@@ -71,9 +62,7 @@ export default function AddCategoryUrlModalComponent({
       <div className="relative block min-h-1/2 w-1/2 rounded-md bg-white p-3 text-black shadow">
         <div
           onClick={() => {
-            if (setIsOpened) {
-              setIsOpened(false);
-            }
+            setItem && setItem(undefined);
           }}
           className="absolute top-0 right-0 flex size-8 translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black font-bold text-white"
         >
@@ -133,7 +122,7 @@ export default function AddCategoryUrlModalComponent({
             className="cursor-pointer self-end rounded-md bg-blue-500 p-2 text-white"
             type="submit"
           >
-            Ekle
+            Güncelle
           </button>
         </form>
       </div>
