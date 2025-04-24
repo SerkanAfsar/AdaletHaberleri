@@ -26,7 +26,7 @@ export default function CustomCategorUrlListEditModal({
   item,
   setItem,
   setIsUpdated,
-  customList,
+  metaData,
 }: ModalComponentType<CategoryUrlListType>) {
   const {
     register,
@@ -39,6 +39,7 @@ export default function CustomCategorUrlListEditModal({
     defaultValues: item,
   });
 
+  const { customList } = metaData;
   const onSubmit: SubmitHandler<CategorySourceUrl> = async (data) => {
     const response = await fetch(`/api/categoryurl/${item?.id}`, {
       method: "PUT",
@@ -71,7 +72,7 @@ export default function CustomCategorUrlListEditModal({
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
           <CustomSelect
             title="Kategori"
-            optionList={customList!}
+            optionList={customList}
             {...register("categoryId", {
               required: "Kategori Seçiniz",
               valueAsNumber: true,

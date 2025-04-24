@@ -19,7 +19,7 @@ export default function EditCell<T, V>({
   const { id } = cell.row.original as any;
 
   const { setIsUpdated } = table.options.meta as any;
-  const { customList } = cell.column.columnDef.meta as any;
+  // const { customList } = cell.column.columnDef.meta as any;
 
   const handleClick = useCallback(async ({ id }: { id: number }) => {
     loader.start();
@@ -86,7 +86,7 @@ export default function EditCell<T, V>({
           item={item}
           setItem={setItem}
           setIsUpdated={setIsUpdated}
-          customList={customList}
+          metaData={table.options.meta!}
         />
       ) : null}
     </>

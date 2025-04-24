@@ -2,6 +2,7 @@ import {
   AdminMenuLinkType,
   AdminMenuType,
   CustomOptionType,
+  SiteSelectors,
 } from "@/Types/Admin.types";
 import {
   ChartColumnStacked,
@@ -56,12 +57,35 @@ export const AdmiMenuList: AdminMenuType[] = [
   },
 ];
 
-export const SourceList: Record<string, { name: string; selector: string }> = {
-  HUKUKIHABER: { name: "HUKUKI HABER", selector: ".card.border-0.h-100 a" },
-  ADALETBIZ: { name: "ADALET BİZ", selector: "" },
-} as const;
+// const titleItem = root.querySelector('h1[itemprop="headline"]');
+// const descriptionItem = root.querySelector('h2[itemprop="description"]');
+// const articleBodyItem = root.querySelector("div[property='articleBody']");
+// const reklamAlani = root.querySelector("div[data-pagespeed='true']");
 
-// .card.border-0.h-100 a
+export const SourceList: Record<string, SiteSelectors> = {
+  HUKUKIHABER: {
+    name: "HUKUKI HABER",
+    newsListSelector: ".card.border-0.h-100 a",
+    titleSelector: `h1[itemprop="headline"]`,
+    advertisementSelector: `div[data-pagespeed='true']`,
+    contentSelector: `div[property='articleBody']`,
+    subDescriptionSelector: `h2[itemprop="description"]`,
+    baseUrl: "https://www.hukukihaber.net",
+    source: "HUKUKIHABER",
+    imageSelector: ".card.border-0.mb-3 img",
+  },
+  ADALETBIZ: {
+    name: "ADALET BİZ",
+    newsListSelector: ".col-6.col-lg-4 a",
+    advertisementSelector: `div[data-pagespeed='true']`,
+    contentSelector: `div[property='articleBody']`,
+    subDescriptionSelector: `h2[itemprop="description"]`,
+    titleSelector: `h1[itemprop="headline"]`,
+    baseUrl: "https://www.adaletbiz.com",
+    source: "ADALETBIZ",
+    imageSelector: ".col-lg-8 .inner img",
+  },
+} as const;
 
 export const SourceListOptionValues: CustomOptionType[] = Object.keys(
   SourceList,

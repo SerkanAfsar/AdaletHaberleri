@@ -1,5 +1,8 @@
-import { slugUrl } from "@/Utils";
+import { SourceList } from "@/Data/Admin.data";
+import { CloudFlareResponseType, SiteSelectors } from "@/Types";
+import { getImageTypeFromPath, slugUrl } from "@/Utils";
 import prisma from "@/Utils/db";
+import { CategorySourceUrl } from "@prisma/client";
 import { parse } from "node-html-parser";
 
 export const GetCategoryNewsListWithCategorySources = async () => {
@@ -12,34 +15,45 @@ export const GetCategoryNewsListWithCategorySources = async () => {
     },
   });
   for (let i = 0; i < categoryList.length; i++) {
-    const category = categoryList[i];
-    const sourceList = category.CategorySourceUrl;
-    for (let k = 0; k < sourceList.length; k++) {
-      const source = sourceList[k];
-      await getHukukiNewsList(source.sourceUrl, category.id);
-    }
+    await getNewsList(categoryList[i].CategorySourceUrl, categoryList[i].id);
   }
 
   return categoryList;
 };
 
-const getHukukiNewsList = async (url: string, categoryId: number) => {
-  const response = await fetch(url);
-  const result = await response.text();
-  const root = parse(result);
-  const allTitles = root.querySelectorAll(".card.border-0.h-100 a");
-  allTitles.forEach(async (item) => {
-    const hrefValue = item.getAttribute("href");
-    if (hrefValue) {
-      await registerHukukiNewsToDb(item.innerText, hrefValue, categoryId);
+const getNewsList = async (
+  sourceList: CategorySourceUrl[],
+  categoryId: number,
+) => {
+  for (let k = 0; k < sourceList.length; k++) {
+    const source = sourceList[k];
+
+    const root = await fetchPageData(source.sourceUrl);
+    if (!root) {
+      return;
     }
-  });
+
+    const sourceSelector = SourceList[source.source];
+    const allTitles = root.querySelectorAll(sourceSelector.newsListSelector);
+    allTitles.reverse().forEach(async (item) => {
+      const hrefValue = item.getAttribute("href");
+      if (hrefValue) {
+        await registerNewsToDb(
+          item.innerText,
+          hrefValue,
+          categoryId,
+          sourceSelector,
+        );
+      }
+    });
+  }
 };
 
-const registerHukukiNewsToDb = async (
+const registerNewsToDb = async (
   title: string,
   hrefValue: string,
   categoryId: number,
+  selector: SiteSelectors,
 ) => {
   if (!title || !title.trim()) {
     return false;
@@ -53,14 +67,18 @@ const registerHukukiNewsToDb = async (
   if (entity) {
     return false;
   }
-  const response = await fetch(`https://www.hukukihaber.net${hrefValue}`);
-  const result = await response.text();
 
-  const root = parse(result);
-  const titleItem = root.querySelector('h1[itemprop="headline"]');
-  const descriptionItem = root.querySelector('h2[itemprop="description"]');
-  const articleBodyItem = root.querySelector("div[property='articleBody']");
-  const reklamAlani = root.querySelector("div[data-pagespeed='true']");
+  const fetchUrl = `${selector.baseUrl}${hrefValue}`;
+  const root = await fetchPageData(fetchUrl);
+  if (!root) {
+    return;
+  }
+  const titleItem = root.querySelector(selector.titleSelector);
+  const descriptionItem = root.querySelector(selector.subDescriptionSelector);
+  const articleBodyItem = root.querySelector(selector.contentSelector);
+  const reklamAlani = root.querySelector(selector.advertisementSelector);
+  const imgAlani = root.querySelector(selector.imageSelector);
+
   if (reklamAlani) {
     articleBodyItem?.removeChild(reklamAlani);
   }
@@ -68,6 +86,7 @@ const registerHukukiNewsToDb = async (
   if (!titleItem?.innerText) {
     return false;
   }
+
   await prisma.news.create({
     data: {
       title: titleItem?.innerText,
@@ -77,8 +96,61 @@ const registerHukukiNewsToDb = async (
       seoDescription: titleItem.innerText,
       readedCount: 1,
       slugUrl: slugUrl(title)!,
-      source: "HUKUKIHABER",
+      source: selector.source,
+      sourceUrlLink: fetchUrl,
+      imageId: imgAlani?.getAttribute("src")
+        ? await uploadImage(title.trim(), imgAlani.getAttribute("src") ?? "")
+        : null,
       categoryId,
     },
   });
+};
+
+async function uploadImage(title: string, imagePath: string) {
+  if (!imagePath) {
+    return null;
+  }
+
+  const imageFetchResponse = await fetch(imagePath);
+  if (!imageFetchResponse.ok) {
+    return null;
+  }
+
+  const type = getImageTypeFromPath(imagePath);
+  const result = await imageFetchResponse.blob();
+  const form = new FormData();
+  const file = new File([result], `${slugUrl(title)}.${type}`, { type: type });
+  form.append("file", file);
+  form.append("requireSignedURLs", "false");
+
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${process.env.NEXT_PUBLIC_CDN_ACCOUNT_ID}/images/v1`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_CDN_ACCOUNT_TOKEN}`,
+      },
+      body: form,
+    },
+  );
+
+  if (response.ok) {
+    const data: CloudFlareResponseType = await response.json();
+    if (!data.success) {
+      return null;
+    }
+    return data.result.id;
+  }
+  return null;
+}
+
+export const fetchPageData = async (url: string) => {
+  try {
+    const response = await fetch(url);
+    const result = await response.text();
+    return parse(result);
+  } catch (error: unknown) {
+    console.log(error);
+    return null;
+  }
 };

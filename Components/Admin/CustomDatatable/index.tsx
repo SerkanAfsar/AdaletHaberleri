@@ -24,7 +24,7 @@ export default function CustomDataTable<T extends object>({
   fetchUrl,
   AddModalComponent,
   title,
-  customList,
+  metaData,
 }: DataTableProps<T>) {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [addModalOpened, setAddModalOpened] = useState<boolean>(false);
@@ -78,6 +78,7 @@ export default function CustomDataTable<T extends object>({
       globalFilter,
     },
     meta: {
+      ...metaData,
       setIsUpdated: () => {
         setIsChanged(!isChanged);
       },
@@ -104,7 +105,7 @@ export default function CustomDataTable<T extends object>({
         <AddModalComponent
           setIsUpdated={setIsChanged}
           setIsOpened={setAddModalOpened}
-          customList={customList}
+          metaData={table.options.meta!}
         />
       )}
 

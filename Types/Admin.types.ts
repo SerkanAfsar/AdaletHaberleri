@@ -1,4 +1,4 @@
-import { CellContext, ColumnDef } from "@tanstack/react-table";
+import { CellContext, ColumnDef, TableMeta } from "@tanstack/react-table";
 import { ComponentType } from "react";
 
 export type AdminMenuType = {
@@ -15,7 +15,8 @@ export type DataTableProps<T extends object> = {
   fetchUrl: string;
   AddModalComponent: ComponentType<ModalComponentType<T>>;
   title: string;
-  customList?: CustomOptionType[];
+
+  metaData?: TableMeta<T>;
 };
 
 export type ResponseResult<T> = {
@@ -34,7 +35,7 @@ export type ModalComponentType<T> = {
   setIsUpdated:
     | (() => React.Dispatch<React.SetStateAction<boolean>>)
     | React.Dispatch<React.SetStateAction<boolean>>;
-  customList?: CustomOptionType[];
+  metaData: TableMeta<T>;
 };
 
 export type EditCellType<T, V> = {
@@ -46,4 +47,29 @@ export type EditCellType<T, V> = {
 export type CustomOptionType = {
   title: string;
   value: string;
+};
+
+export type SiteSelectors = {
+  name: string;
+  newsListSelector: string;
+  titleSelector: string;
+  subDescriptionSelector: string;
+  contentSelector: string;
+  advertisementSelector: string;
+  baseUrl: string;
+  source: string;
+  imageSelector: string;
+};
+
+export type CloudFlareResponseType = {
+  result: {
+    id: string;
+    filename: string;
+    uploaded: string;
+    requireSignedURLs: boolean;
+    variants: string[];
+  };
+  success: boolean;
+  errors: any[];
+  messages: any[];
 };

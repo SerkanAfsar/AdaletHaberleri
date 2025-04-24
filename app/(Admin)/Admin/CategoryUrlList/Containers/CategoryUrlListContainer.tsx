@@ -89,7 +89,7 @@ export default function CategoryUrlListContainer({
       AddModalComponent={AddCategoryUrlModalComponent}
       fetchUrl="/api/categoryurl"
       title="Kategori Url"
-      customList={categoryList}
+      metaData={{ customList: categoryList }}
     />
   );
 }

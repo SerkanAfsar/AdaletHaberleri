@@ -25,7 +25,7 @@ const fetchCategoryName = async (value: string): Promise<boolean> => {
 export default function AddCategoryUrlModalComponent({
   setIsUpdated,
   setIsOpened,
-  customList,
+  metaData,
 }: ModalComponentType<CategoryUrlListType>) {
   const {
     register,
@@ -37,7 +37,7 @@ export default function AddCategoryUrlModalComponent({
     mode: "onChange",
   });
 
-  console.log(customList);
+  const { customList } = metaData;
 
   // const categoryName = watch("categoryName");
 

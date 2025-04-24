@@ -66,3 +66,8 @@ export const ConvertToCustomOptions = <
     value: item[fieldTwo] as string,
   }));
 };
+
+export const getImageTypeFromPath = (path: string) => {
+  const match = path.match(/\.(\w+)(?:\?.*)?$/);
+  return match ? match[1].toLowerCase() : "jpeg";
+};
