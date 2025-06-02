@@ -1,5 +1,6 @@
 import { ResponseResult } from "@/Types";
-import { errorHandler } from "@/Utils";
+import { FooterLinkItemType } from "@/Types/Client.types";
+import { errorHandler, generateCategoryUrl } from "@/Utils";
 import prisma from "@/Utils/db";
 import { Category, Prisma } from "@prisma/client";
 import { ColumnFiltersState, SortingState } from "@tanstack/react-table";
@@ -232,3 +233,23 @@ export const GetAllCategoriesListService = async () => {
     return errorHandler(error);
   }
 };
+
+export async function GetAllCategoriesFooterService() {
+  try {
+    const result = await prisma.category.findMany();
+
+    const responseResult: ResponseResult<FooterLinkItemType> = {
+      data: result.map((item) => ({
+        linkTitle: item.categoryName,
+        url: generateCategoryUrl(item.categoryName, item.id),
+      })),
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: 1,
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler<number>(error);
+  }
+}

@@ -1,8 +1,10 @@
 import {
+  AdminClaimsType,
   AdminMenuLinkType,
   AdminMenuType,
   CustomOptionType,
   SiteSelectors,
+  UserType,
 } from "@/Types/Admin.types";
 import {
   ChartColumnStacked,
@@ -13,7 +15,15 @@ import {
   SquarePlus,
 } from "lucide-react";
 
-export const AdminUrlList: Record<string, AdminMenuLinkType> = {
+export const AdminUrlList: Record<
+  | "Dashboard"
+  | "Kategoriler"
+  | "KategoriUrlList"
+  | "Haberler"
+  | "HaberEkle"
+  | "Cikis",
+  AdminMenuLinkType
+> = {
   Dashboard: "/Admin/Dashboard",
   Kategoriler: "/Admin/Categories",
   KategoriUrlList: "/Admin/CategoryUrlList",
@@ -57,11 +67,6 @@ export const AdmiMenuList: AdminMenuType[] = [
   },
 ];
 
-// const titleItem = root.querySelector('h1[itemprop="headline"]');
-// const descriptionItem = root.querySelector('h2[itemprop="description"]');
-// const articleBodyItem = root.querySelector("div[property='articleBody']");
-// const reklamAlani = root.querySelector("div[data-pagespeed='true']");
-
 export const SourceList: Record<string, SiteSelectors> = {
   HUKUKIHABER: {
     name: "HUKUKI HABER",
@@ -93,3 +98,21 @@ export const SourceListOptionValues: CustomOptionType[] = Object.keys(
   title: item,
   value: SourceList[item].name,
 }));
+
+export const Users: UserType[] = [
+  {
+    email: "serkan@deneme.com",
+    password: "123",
+    role: "Admin",
+  },
+  {
+    email: "selin@deneme.com",
+    password: "123",
+    role: "User",
+  },
+];
+
+export const TestData: AdminClaimsType = {
+  Admin: [AdminUrlList.Dashboard, AdminUrlList.Haberler],
+  User: [AdminUrlList.Kategoriler],
+};

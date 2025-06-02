@@ -1,16 +1,18 @@
 import { File, Trash } from "lucide-react";
-import { CellContext } from "@tanstack/react-table";
 import React, { useCallback, useState } from "react";
 import { EditCellType, ResponseResult } from "@/Types";
 import { toast } from "react-toastify";
-import { Category } from "@prisma/client";
 import { useTopLoader } from "nextjs-toploader";
+import { useRouter } from "next/navigation";
 
 export default function EditCell<T, V>({
   cellContext,
   fetchUrl,
   ModalComponent,
+  forceId,
+  forceIdUrl,
 }: EditCellType<T, V>) {
+  const router = useRouter();
   const loader = useTopLoader();
   const [item, setItem] = useState<T | undefined>(undefined);
 
@@ -19,9 +21,11 @@ export default function EditCell<T, V>({
   const { id } = cell.row.original as any;
 
   const { setIsUpdated } = table.options.meta as any;
-  // const { customList } = cell.column.columnDef.meta as any;
 
   const handleClick = useCallback(async ({ id }: { id: number }) => {
+    if (forceId) {
+      router.push(`${forceIdUrl}/${id}`);
+    }
     loader.start();
     const response = await fetch(`${fetchUrl}/${id}`, {
       method: "GET",
@@ -81,7 +85,7 @@ export default function EditCell<T, V>({
           onClick={async () => await handleDelete({ id })}
         />
       </div>
-      {item ? (
+      {item && ModalComponent ? (
         <ModalComponent
           item={item}
           setItem={setItem}

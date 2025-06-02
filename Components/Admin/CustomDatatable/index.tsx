@@ -18,6 +18,7 @@ import CustomDebouncedInput from "@/Components/UI/CustomDebouncedInput";
 import { Search, SortAsc, SortDesc } from "lucide-react";
 import ReactPaginate from "react-paginate";
 import { cn } from "@/Utils";
+import { useRouter } from "next/navigation";
 
 export default function CustomDataTable<T extends object>({
   columns,
@@ -25,7 +26,9 @@ export default function CustomDataTable<T extends object>({
   AddModalComponent,
   title,
   metaData,
+  addUrl,
 }: DataTableProps<T>) {
+  const router = useRouter();
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [addModalOpened, setAddModalOpened] = useState<boolean>(false);
   const [isChanged, setIsChanged] = useState<boolean>(false);
@@ -101,7 +104,7 @@ export default function CustomDataTable<T extends object>({
 
   return (
     <>
-      {addModalOpened && (
+      {addModalOpened && AddModalComponent && (
         <AddModalComponent
           setIsUpdated={setIsChanged}
           setIsOpened={setAddModalOpened}
@@ -131,7 +134,11 @@ export default function CustomDataTable<T extends object>({
             <button
               type="button"
               className="w-full cursor-pointer rounded-md bg-blue-500 p-2 text-white dark:bg-blue-900"
-              onClick={() => setAddModalOpened(true)}
+              onClick={() =>
+                AddModalComponent
+                  ? setAddModalOpened(true)
+                  : router.push(addUrl!)
+              }
             >
               Yeni {title} Ekle
             </button>
@@ -207,24 +214,29 @@ export default function CustomDataTable<T extends object>({
         </table>
       </div>
 
-      <div>
+      <div className="mt-4 flex items-center justify-between">
+        <TableFooter
+          pageIndex={table.getState().pagination.pageIndex}
+          pageSize={table.getState().pagination.pageSize}
+          totalCount={rowCount}
+        />
         <ReactPaginate
           breakLabel="..."
           nextLabel="Sonraki >"
           onPageChange={(e) => table.setPageIndex(Number(e.selected))}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           pageCount={Math.ceil(
             Number(rowCount) / Number(table.getState().pagination.pageSize),
           )}
           forcePage={table.getState().pagination.pageIndex}
           previousLabel="< Önceki"
           renderOnZeroPageCount={null}
-          containerClassName="flex justify-end text-sm space-x-2 mt-4"
-          pageClassName=" border border-gray-300 w-8 cursor-pointer text-center rounded-md "
+          containerClassName="flex justify-end text-sm space-x-2"
+          pageClassName=" border border-gray-300 w-auto cursor-pointer text-center rounded-md "
           activeClassName="bg-black text-white"
           pageLinkClassName="block w-full h-full  px-3 py-2"
-          previousClassName="bg-gray-100 cursor-pointer border border-gray-300 rounded-md px-3 py-2 hover:bg-gray-200 transition"
-          nextClassName="bg-gray-100 border border-gray-300 rounded-md px-3 py-2 hover:bg-gray-200 transition"
+          previousClassName="bg-gray-100 dark:bg-black dark:hover:bg-inherit cursor-pointer border border-gray-300 rounded-md px-3 py-2 hover:bg-gray-200 transition"
+          nextClassName="bg-gray-100 dark:bg-black border border-gray-300 dark:hover:bg-inherit rounded-md px-3 py-2 hover:bg-gray-200 transition"
           nextLinkClassName="block cursor-pointer w-full h-full"
           breakClassName="px-3 py-2"
           disabledClassName="opacity-50 cursor-not-allowed"
@@ -247,5 +259,24 @@ const TableLoadingSkeleton = ({ rows = 5, columns = 4 }) => {
         </tr>
       ))}
     </tbody>
+  );
+};
+
+const TableFooter = ({
+  pageIndex,
+  pageSize,
+  totalCount,
+}: {
+  pageIndex: number;
+  pageSize: number;
+  totalCount: number;
+}) => {
+  const start = pageIndex * pageSize + 1;
+  const end = Math.min((pageIndex + 1) * pageSize, totalCount);
+
+  return (
+    <div className="p-2 text-sm text-gray-600">
+      Gösterim {start}–{end} Toplam {totalCount} Kayıt
+    </div>
   );
 };

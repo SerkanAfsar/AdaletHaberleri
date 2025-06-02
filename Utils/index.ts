@@ -1,15 +1,23 @@
-import { CustomOptionType, ResponseResult } from "@/Types";
+import {
+  CustomOptionType,
+  ImageUrlType,
+  ResponseResult,
+  UserType,
+} from "@/Types";
 import { clsx, type ClassValue } from "clsx";
-import slugify from "slugify";
 import { twMerge } from "tailwind-merge";
 import prisma from "./db";
+import { tr } from "date-fns/locale";
+
+import { JWTPayload, jwtVerify } from "jose";
+import { formatDistanceToNowStrict } from "date-fns";
 
 export const cn = (...args: ClassValue[]) => {
   return twMerge(clsx(args));
 };
 
-export const errorHandler = (err: unknown) => {
-  const responseResult: ResponseResult<any> = {
+export function errorHandler<T>(err: unknown) {
+  const responseResult: ResponseResult<T> = {
     data: null,
     error: null,
     statusCode: 400,
@@ -24,20 +32,24 @@ export const errorHandler = (err: unknown) => {
     responseResult.error = "Something went wrong";
   }
   return responseResult;
-};
+}
 
-export const slugUrl = (value: string): string | null => {
-  if (value) {
-    return slugify(value, {
-      replacement: "-", // replace spaces with replacement character, defaults to `-`
-      remove: undefined, // remove characters that match regex, defaults to `undefined`
-      lower: true, // convert to lower case, defaults to `false`
-      strict: false, // strip special characters except replacement, defaults to `false`
-      locale: "tr", // language code of the locale to use
-      trim: true, // trim leading and trailing replacement chars, defaults to `true`
-    });
-  }
-  return null;
+export const slugUrl = (value: string): string => {
+  return value
+    .toLowerCase()
+    .normalize("NFD") // ü -> u + ¨
+    .replace(/[\u0300-\u036f]/g, "") // ¨ gibi işaretleri sil
+    .replace(/ç/g, "c")
+    .replace(/ğ/g, "g")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ş/g, "s")
+    .replace(/ü/g, "u")
+    .replace(/[’‘“”'"`´]/g, "") // tüm tırnak çeşitlerini kaldır
+    .replace(/[^a-z0-9\s-]/g, "") // harf, sayı, boşluk ve tire dışındakileri sil
+    .replace(/\s+/g, "-") // boşlukları - yap
+    .replace(/-+/g, "-") // birden fazla - varsa sadeleştir
+    .replace(/^-+|-+$/g, ""); // baş/son tireleri sil
 };
 
 export const checkIfCategoryNameExists = async (value: string) => {
@@ -70,4 +82,67 @@ export const ConvertToCustomOptions = <
 export const getImageTypeFromPath = (path: string) => {
   const match = path.match(/\.(\w+)(?:\?.*)?$/);
   return match ? match[1].toLowerCase() : "jpeg";
+};
+
+export const verifyToken = async (token: string) => {
+  try {
+    const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_TOKEN!);
+    const { payload } = await jwtVerify(token, secret);
+    const result = payload as JWTPayload & UserType;
+    return result.role;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const GetImageUrlCdn = (path: string): ImageUrlType => {
+  return {
+    small: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Small`,
+    medium: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Medium`,
+    large: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Big`,
+  } as ImageUrlType;
+};
+
+export const convertType = <
+  T extends object,
+  K1 extends keyof T,
+  K2 extends keyof T,
+>(
+  data: T[],
+  titleOne: string,
+  keyFieldOne: K1,
+  titleTwo: string,
+  keyFieldTwo: K2,
+) => {
+  return data.map((item) => ({
+    [titleOne]: item[keyFieldOne],
+    [titleTwo]: item[keyFieldTwo],
+  }));
+};
+
+export const dateFormat = (date: Date) => {
+  return formatDistanceToNowStrict(date, { locale: tr, addSuffix: true });
+};
+
+export const generateNewsUrl = (
+  categoryName: string,
+  title: string,
+  id: number,
+): string => {
+  return `/haberler/${slugUrl(categoryName)}/${slugUrl(title)}/${id}`;
+};
+
+export const sharpString = (val: string, lenght: number) => {
+  if (val.length > lenght) {
+    return val.substring(0, lenght) + "...";
+  }
+  return val;
+};
+
+export const generateCategoryUrl = (
+  categoryName: string,
+  categoryId: number,
+): string => {
+  return `/kategori/${slugUrl(categoryName)}/${categoryId}`;
 };

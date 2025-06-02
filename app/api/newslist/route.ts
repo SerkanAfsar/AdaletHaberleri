@@ -1,4 +1,4 @@
-import { GetCategoryNewsListWithCategorySources } from "@/Services/NewsService";
+import { GetCategoryNewsListWithCategorySources } from "@/Services/News.service";
 import { NextResponse } from "next/server";
 
 export async function GET() {

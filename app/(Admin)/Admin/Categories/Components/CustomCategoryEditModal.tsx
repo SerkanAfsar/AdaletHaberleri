@@ -35,7 +35,9 @@ export default function CustomCategoryEditModal({
     });
     const result: ResponseResult<Category> = await response.json();
     if (result.success) {
-      setItem && setItem(undefined);
+      if (setItem) {
+        setItem(undefined);
+      }
       setIsUpdated((prev) => !prev);
       return toast.success("Güncelleme Başarılı", { position: "top-right" });
     } else {

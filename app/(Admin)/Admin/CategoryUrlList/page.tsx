@@ -1,4 +1,4 @@
-import { GetAllCategoriesListService } from "@/Services/Category.service";
+import { GetAllCategoriesListService } from "@/Services";
 import CategoryUrlListContainer from "./Containers/CategoryUrlListContainer";
 import { ConvertToCustomOptions } from "@/Utils";
 import { Category } from "@prisma/client";

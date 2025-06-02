@@ -52,4 +52,5 @@ const CustomDebouncedInput = React.forwardRef<
     );
   },
 );
+CustomDebouncedInput.displayName = "CustomDebouncedInput";
 export default CustomDebouncedInput;

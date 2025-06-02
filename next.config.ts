@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
       dynamic: 0,
     },
   },
+  images: {
+    domains: ["imagedelivery.net"],
+  },
 };
 
 export default nextConfig;

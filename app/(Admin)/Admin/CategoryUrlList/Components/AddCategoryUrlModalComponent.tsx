@@ -1,8 +1,6 @@
 import CustomInput from "@/Components/UI/CustomInput";
 import { ModalComponentType, ResponseResult } from "@/Types";
-import { checkIfCategoryNameExists, slugUrl } from "@/Utils";
-import { Category, CategorySourceUrl } from "@prisma/client";
-import { useEffect } from "react";
+import { CategorySourceUrl } from "@prisma/client";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { CategoryUrlListType } from "../Containers/CategoryUrlListContainer";
@@ -37,7 +35,7 @@ export default function AddCategoryUrlModalComponent({
     mode: "onChange",
   });
 
-  const { customList } = metaData;
+  const { customList } = metaData as any;
 
   // const categoryName = watch("categoryName");
 
@@ -55,7 +53,10 @@ export default function AddCategoryUrlModalComponent({
     });
     const result: ResponseResult<CategorySourceUrl> = await response.json();
     if (result.success) {
-      setIsOpened && setIsOpened(false);
+      if (setIsOpened) {
+        setIsOpened(false);
+      }
+
       setIsUpdated((prev) => !prev);
       return toast.success(
         `${(result.data as CategorySourceUrl).sourceUrl} Eklendi`,

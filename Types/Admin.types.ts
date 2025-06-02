@@ -1,3 +1,4 @@
+import { AdminUrlList } from "@/Data/Admin.data";
 import { CellContext, ColumnDef, TableMeta } from "@tanstack/react-table";
 import { ComponentType } from "react";
 
@@ -13,11 +14,18 @@ export type AdminMenuLinkType = `/Admin/${string}`;
 export type DataTableProps<T extends object> = {
   columns: ColumnDef<T>[];
   fetchUrl: string;
-  AddModalComponent: ComponentType<ModalComponentType<T>>;
   title: string;
-
   metaData?: TableMeta<T>;
-};
+} & (
+  | {
+      AddModalComponent?: ComponentType<ModalComponentType<T>>;
+      addUrl?: never;
+    }
+  | {
+      AddModalComponent?: never;
+      addUrl?: string;
+    }
+);
 
 export type ResponseResult<T> = {
   data?: T | T[] | null;
@@ -38,11 +46,22 @@ export type ModalComponentType<T> = {
   metaData: TableMeta<T>;
 };
 
-export type EditCellType<T, V> = {
-  cellContext: CellContext<T, V>;
-  fetchUrl: string;
-  ModalComponent: React.ComponentType<ModalComponentType<T>>;
-};
+export type EditCellType<T, V> = {} & (
+  | {
+      cellContext: CellContext<T, V>;
+      fetchUrl: string;
+      ModalComponent?: React.ComponentType<ModalComponentType<T>>;
+      forceId?: never;
+      forceIdUrl?: never;
+    }
+  | {
+      cellContext: CellContext<T, V>;
+      fetchUrl: string;
+      ModalComponent?: never;
+      forceId?: boolean;
+      forceIdUrl?: string;
+    }
+);
 
 export type CustomOptionType = {
   title: string;
@@ -72,4 +91,34 @@ export type CloudFlareResponseType = {
   success: boolean;
   errors: any[];
   messages: any[];
+};
+
+export type ImageUrlType = {
+  small: `https://imagedelivery.net/${string}/${string}/Small`;
+  medium: `https://imagedelivery.net/${string}/${string}/Medium`;
+  large: `https://imagedelivery.net/${string}/${string}/Big`;
+};
+
+export type DeleteImageUrlType =
+  `https://api.cloudflare.com/client/v4/accounts/${string}/images/v1/${string}`;
+
+export type LoginType = {
+  email: string;
+  password: string;
+};
+
+export type ModuleType = "Kategori" | "KategoriUrl" | "Haberler";
+export type ClaimType = "read" | "add" | "update" | "delete";
+
+export type ModuleClaimsTypes = Record<ModuleType, ClaimType[]>;
+
+export type AdminType = "Admin" | "User";
+
+export type AdminClaimsType = Record<
+  AdminType,
+  (keyof typeof AdminUrlList)[number][]
+>;
+
+export type UserType = LoginType & {
+  role: AdminType;
 };

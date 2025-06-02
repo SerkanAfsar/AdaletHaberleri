@@ -1,6 +1,6 @@
 import CustomInput from "@/Components/UI/CustomInput";
 import { ModalComponentType, ResponseResult } from "@/Types";
-import { checkIfCategoryNameExists, slugUrl } from "@/Utils";
+import { slugUrl } from "@/Utils";
 import { Category } from "@prisma/client";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -49,7 +49,10 @@ export default function AddCategoryModalComponent({
     });
     const result: ResponseResult<Category> = await response.json();
     if (result.success) {
-      setIsOpened && setIsOpened(false);
+      if (setIsOpened) {
+        setIsOpened(false);
+      }
+
       setIsUpdated((prev) => !prev);
       return toast.success(
         `${(result.data as Category).categoryName} Eklendi`,

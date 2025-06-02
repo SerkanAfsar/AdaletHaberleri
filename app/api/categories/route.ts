@@ -1,7 +1,4 @@
-import {
-  AddCategoryService,
-  GetAllCategoriesService,
-} from "@/Services/Category.service";
+import { AddCategoryService, GetAllCategoriesService } from "@/Services";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

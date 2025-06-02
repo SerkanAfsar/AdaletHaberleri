@@ -2,9 +2,7 @@ import {
   DeleteCategoryByIdService,
   GetCategoryByIdService,
   UpdateCategoryWithIdService,
-} from "@/Services/Category.service";
-import { ResponseResult } from "@/Types";
-import prisma from "@/Utils/db";
+} from "@/Services";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(

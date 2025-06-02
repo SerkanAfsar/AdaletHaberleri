@@ -1,8 +1,8 @@
 import CustomInput from "@/Components/UI/CustomInput";
 import { ModalComponentType, ResponseResult } from "@/Types";
-import { checkIfCategoryNameExists, slugUrl } from "@/Utils";
-import { Category, CategorySourceUrl } from "@prisma/client";
-import { useEffect } from "react";
+
+import { CategorySourceUrl } from "@prisma/client";
+
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { CategoryUrlListType } from "../Containers/CategoryUrlListContainer";
@@ -39,7 +39,7 @@ export default function CustomCategorUrlListEditModal({
     defaultValues: item,
   });
 
-  const { customList } = metaData;
+  const { customList } = metaData as any;
   const onSubmit: SubmitHandler<CategorySourceUrl> = async (data) => {
     const response = await fetch(`/api/categoryurl/${item?.id}`, {
       method: "PUT",
@@ -50,7 +50,10 @@ export default function CustomCategorUrlListEditModal({
     });
     const result: ResponseResult<CategorySourceUrl> = await response.json();
     if (result.success) {
-      setItem && setItem(undefined);
+      if (setItem) {
+        setItem(undefined);
+      }
+
       setIsUpdated((prev) => !prev);
       return toast.success("Güncelleme Başarılı", { position: "top-right" });
     } else {
@@ -63,7 +66,9 @@ export default function CustomCategorUrlListEditModal({
       <div className="relative block min-h-1/2 w-1/2 rounded-md bg-white p-3 text-black shadow">
         <div
           onClick={() => {
-            setItem && setItem(undefined);
+            if (setItem) {
+              setItem(undefined);
+            }
           }}
           className="absolute top-0 right-0 flex size-8 translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black font-bold text-white"
         >

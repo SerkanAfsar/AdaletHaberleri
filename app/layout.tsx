@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import NextTopLoader from "nextjs-toploader";
@@ -13,14 +13,18 @@ const outFitFont = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
 });
+const interFont = Inter({ variable: "--font-inter", subsets: ["latin"] });
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${outFitFont.variable} antialiased`}>
+    <html lang="tr">
+      <body
+        className={`${outFitFont.variable} font-inter ${interFont.variable} antialiased`}
+      >
         {children}
         <ToastContainer />
         <NextTopLoader
