@@ -1,5 +1,6 @@
 import {
   CustomOptionType,
+  EnvType,
   ImageUrlType,
   ResponseResult,
   UserType,
@@ -8,9 +9,11 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import prisma from "./db";
 import { tr } from "date-fns/locale";
+import adaletHaberleriImg from "../public/adalethaberleri.webp";
 
 import { JWTPayload, jwtVerify } from "jose";
 import { formatDistanceToNowStrict } from "date-fns";
+import { StaticImageData } from "next/image";
 
 export const cn = (...args: ClassValue[]) => {
   return twMerge(clsx(args));
@@ -35,21 +38,27 @@ export function errorHandler<T>(err: unknown) {
 }
 
 export const slugUrl = (value: string): string => {
-  return value
-    .toLowerCase()
-    .normalize("NFD") // ü -> u + ¨
-    .replace(/[\u0300-\u036f]/g, "") // ¨ gibi işaretleri sil
-    .replace(/ç/g, "c")
-    .replace(/ğ/g, "g")
-    .replace(/ı/g, "i")
-    .replace(/ö/g, "o")
-    .replace(/ş/g, "s")
-    .replace(/ü/g, "u")
-    .replace(/[’‘“”'"`´]/g, "") // tüm tırnak çeşitlerini kaldır
-    .replace(/[^a-z0-9\s-]/g, "") // harf, sayı, boşluk ve tire dışındakileri sil
-    .replace(/\s+/g, "-") // boşlukları - yap
-    .replace(/-+/g, "-") // birden fazla - varsa sadeleştir
-    .replace(/^-+|-+$/g, ""); // baş/son tireleri sil
+  if (value) {
+    value = value.replace("'", "-");
+    return value
+      .toLowerCase()
+      .normalize("NFD") // ü -> u + ¨
+      .replace("'", "-")
+      .replace(/['"]/g, "")
+      .replace(/[\u0300-\u036f]/g, "") // ¨ gibi işaretleri sil
+      .replace(/ç/g, "c")
+      .replace(/ğ/g, "g")
+      .replace(/ı/g, "i")
+      .replace(/ö/g, "o")
+      .replace(/ş/g, "s")
+      .replace(/ü/g, "u")
+      .replace(/[’‘“”'"`´]/g, "") // tüm tırnak çeşitlerini kaldır
+      .replace(/[^a-z0-9\s-]/g, "") // harf, sayı, boşluk ve tire dışındakileri sil
+      .replace(/\s+/g, "-") // boşlukları - yap
+      .replace(/-+/g, "-") // birden fazla - varsa sadeleştir
+      .replace(/^-+|-+$/g, ""); // baş/son tireleri sil
+  }
+  return "";
 };
 
 export const checkIfCategoryNameExists = async (value: string) => {
@@ -96,12 +105,18 @@ export const verifyToken = async (token: string) => {
   }
 };
 
-export const GetImageUrlCdn = (path: string): ImageUrlType => {
-  return {
-    small: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Small`,
-    medium: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Medium`,
-    large: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Big`,
-  } as ImageUrlType;
+export const GetImageUrlCdn = (
+  path: string | null,
+): ImageUrlType | StaticImageData => {
+  if (path) {
+    return {
+      small: `https://imagedelivery.net/${envVariables.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Small`,
+      medium: `https://imagedelivery.net/${envVariables.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Medium`,
+      large: `https://imagedelivery.net/${envVariables.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/Big`,
+      ExtraLarge: `https://imagedelivery.net/${envVariables.NEXT_PUBLIC_ACCOUNT_KEY}/${path}/ExtraLarge`,
+    } as ImageUrlType;
+  }
+  return adaletHaberleriImg;
 };
 
 export const convertType = <
@@ -145,4 +160,26 @@ export const generateCategoryUrl = (
   categoryId: number,
 ): string => {
   return `/kategori/${slugUrl(categoryName)}/${categoryId}`;
+};
+
+export const CacheNames = {
+  CategoryList: "CategoryList",
+  HeaderBottomCategoryList: "HeaderBottomCategoryList",
+  LastSectionNews: "LastSectionNews",
+  MenuList: "MenuList",
+  LastFiveNews: "LastFiveNews",
+} as const;
+
+export const envVariables: EnvType = {
+  DATABASE_URL: process.env.DATABASE_URL!,
+  NEXT_PUBLIC_ACCOUNT_KEY: process.env.NEXT_PUBLIC_ACCOUNT_KEY!,
+  NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL!,
+  NEXT_PUBLIC_CDN_ACCOUNT_ID: process.env.NEXT_PUBLIC_CDN_ACCOUNT_ID!,
+  NEXT_PUBLIC_CDN_ACCOUNT_TOKEN: process.env.NEXT_PUBLIC_CDN_ACCOUNT_TOKEN!,
+  NEXT_PUBLIC_EMAIL: process.env.NEXT_PUBLIC_EMAIL!,
+  NEXT_PUBLIC_PAGINATION_ITEM_COUNT: Number(
+    process.env.NEXT_PUBLIC_PAGINATION_ITEM_COUNT!,
+  ),
+  NEXT_PUBLIC_PASSWORD: process.env.NEXT_PUBLIC_PASSWORD!,
+  NEXT_PUBLIC_TOKEN: process.env.NEXT_PUBLIC_TOKEN!,
 };

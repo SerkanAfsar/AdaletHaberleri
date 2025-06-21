@@ -21,7 +21,6 @@ export default function HeaderTop() {
     >
       <div className="flex-co container flex items-center justify-between">
         <ul className="flexCenter gap-3 font-semibold text-gray-600">
-          <li>Storm - 10° C</li>
           <li>
             <Link href={"/"} className="block py-3">
               Anasayfa
@@ -30,6 +29,11 @@ export default function HeaderTop() {
           <li>
             <Link href={"/"} className="block py-3">
               Hakkımızda
+            </Link>
+          </li>
+          <li>
+            <Link href={"/"} className="block py-3">
+              İletişim
             </Link>
           </li>
         </ul>

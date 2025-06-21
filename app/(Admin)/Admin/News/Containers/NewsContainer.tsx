@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useMemo } from "react";
 
 import { AdminUrlList } from "@/Data/Admin.data";
+import { envVariables } from "@/Utils";
 
 export type NewsListType = Partial<News> & {
   Category: Category;
@@ -48,9 +49,10 @@ export default function NewsContainer() {
         cell: ({ row }) => {
           const imageId = row.original.imageId;
           const url: ImageUrlType = {
-            large: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${imageId}/Big`,
-            medium: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${imageId}/Medium`,
-            small: `https://imagedelivery.net/${process.env.NEXT_PUBLIC_ACCOUNT_KEY}/${imageId}/Small`,
+            large: `https://imagedelivery.net/${envVariables.NEXT_PUBLIC_ACCOUNT_KEY}/${imageId}/Big`,
+            medium: `https://imagedelivery.net/${envVariables.NEXT_PUBLIC_ACCOUNT_KEY}/${imageId}/Medium`,
+            small: `https://imagedelivery.net/${envVariables.NEXT_PUBLIC_ACCOUNT_KEY}/${imageId}/Small`,
+            ExtraLarge: `https://imagedelivery.net/${envVariables.NEXT_PUBLIC_ACCOUNT_KEY}/${imageId}/ExtraLarge`,
           };
 
           return (

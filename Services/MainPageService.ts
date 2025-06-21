@@ -1,5 +1,11 @@
 "use server";
+
 import { ResponseResult } from "@/Types";
+import {
+  CategoryLinkType,
+  HeaderMiddleLinkType,
+  NewsLinkType,
+} from "@/Types/Client.types";
 import { errorHandler } from "@/Utils";
 import prisma from "@/Utils/db";
 
@@ -34,9 +40,15 @@ export const GetMainPageLastNewsService = async () => {
     return errorHandler(error);
   }
 };
+
 export const GetMenuListService = async () => {
   try {
-    const data = await prisma.category.findMany({
+    const categoryListData = await prisma.category.findMany({
+      orderBy: {
+        categoryName: "asc",
+      },
+    });
+    const categoryDetailData = await prisma.category.findMany({
       where: {
         Newses: {
           some: {},
@@ -53,17 +65,44 @@ export const GetMenuListService = async () => {
           },
         },
       },
-      take: 7,
+      take: 5,
     });
-    const responseResult: ResponseResult<any> = {
+
+    const categoryNewsLinksData: HeaderMiddleLinkType[] =
+      categoryDetailData.map((category) => ({
+        categoryName: category.categoryName,
+        Data: category.Newses.map((newsItem) => ({
+          categoryName: category.categoryName,
+          id: newsItem.id,
+          imageId: newsItem.imageId,
+          title: newsItem.title,
+        })) as NewsLinkType[],
+        type: "News",
+      }));
+
+    const categoryLinksListData: HeaderMiddleLinkType = {
+      categoryName: "Diğerleri",
+      Data: categoryListData.map((category) => ({
+        categoryName: category.categoryName,
+        id: category.id,
+      })) as CategoryLinkType[],
+      type: "List",
+    };
+
+    const newData = [
+      ...categoryNewsLinksData,
+      categoryLinksListData,
+    ] as HeaderMiddleLinkType[];
+
+    const responseResult: ResponseResult<HeaderMiddleLinkType> = {
       success: true,
       statusCode: 200,
-      data: data,
+      data: newData,
       error: null,
-      totalCount: data.length,
+      totalCount: 0,
     };
     return responseResult;
   } catch (error: unknown) {
-    return errorHandler(error);
+    return errorHandler<HeaderMiddleLinkType>(error);
   }
 };

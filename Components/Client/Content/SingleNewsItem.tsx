@@ -14,17 +14,18 @@ export default function SingleNewsItem({
   const { matched } = useMediaQuery("(max-width:768px)");
   const elem: typeof item.type = matched ? "big" : item.type;
 
-  const imgUrl = GetImageUrlCdn(item.imageId!);
+  const imgUrl = GetImageUrlCdn(item.imageId);
 
   const imgContent = () => {
     if (elem == "big") {
+      const imgPath = "large" in imgUrl ? imgUrl.large : imgUrl;
       return (
         <Link
           href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
           className="relative h-full w-full overflow-hidden border border-gray-400"
         >
           <Image
-            src={imgUrl.large}
+            src={imgPath}
             width={800}
             height={300}
             alt={item.title || "Haber"}
@@ -33,17 +34,18 @@ export default function SingleNewsItem({
         </Link>
       );
     }
+    const imgPath = "medium" in imgUrl ? imgUrl.medium : imgUrl;
     return (
       <Link
         href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
         className="relative block shrink-0 grow-0 overflow-hidden border border-gray-400"
       >
         <Image
-          src={imgUrl.medium}
+          src={imgPath}
           width={150}
           height={85}
           alt={item.title || "Haber"}
-          className="hover object-cover object-center transition-all hover:scale-105"
+          className="hover h-full object-cover object-center transition-all hover:scale-105"
         />
       </Link>
     );

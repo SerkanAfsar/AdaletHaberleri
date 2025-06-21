@@ -53,6 +53,7 @@ export type EditCellType<T, V> = {} & (
       ModalComponent?: React.ComponentType<ModalComponentType<T>>;
       forceId?: never;
       forceIdUrl?: never;
+      action?: (prevData: any, data: any) => Promise<ResponseResult<any>>;
     }
   | {
       cellContext: CellContext<T, V>;
@@ -60,6 +61,7 @@ export type EditCellType<T, V> = {} & (
       ModalComponent?: never;
       forceId?: boolean;
       forceIdUrl?: string;
+      action?: (prevData: any, data: any) => Promise<ResponseResult<any>>;
     }
 );
 
@@ -97,6 +99,7 @@ export type ImageUrlType = {
   small: `https://imagedelivery.net/${string}/${string}/Small`;
   medium: `https://imagedelivery.net/${string}/${string}/Medium`;
   large: `https://imagedelivery.net/${string}/${string}/Big`;
+  ExtraLarge: `https://imagedelivery.net/${string}/${string}/ExtraLarge`;
 };
 
 export type DeleteImageUrlType =
@@ -121,4 +124,8 @@ export type AdminClaimsType = Record<
 
 export type UserType = LoginType & {
   role: AdminType;
+};
+
+export type NullableType<T> = {
+  [K in keyof T]?: T[K];
 };

@@ -1,5 +1,6 @@
 import { NewsDetailPickType } from "@/Services";
 import { cn, GetImageUrlCdn } from "@/Utils";
+
 import Image from "next/image";
 
 export default function NewsDetailSection({
@@ -12,7 +13,14 @@ export default function NewsDetailSection({
   if (!data) {
     return null;
   }
-  const imgUrl = GetImageUrlCdn(data.imageId!);
+  const imgUrl = GetImageUrlCdn(data.imageId);
+  const imgPath = "large" in imgUrl ? imgUrl.large : imgUrl;
+  const readableDate = new Date(data.createdAt).toLocaleDateString("tr-TR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  });
   return (
     <article className={cn("flex flex-col gap-3", className)}>
       <header className="flex flex-col gap-3">
@@ -22,10 +30,10 @@ export default function NewsDetailSection({
         ></h1>
         <figure className="block w-full">
           <Image
-            src={imgUrl.large}
-            width={500}
-            height={100}
-            className="object-fit-cover w-full rounded-md border object-center"
+            src={imgPath}
+            width={835}
+            height={470}
+            className="object-fit-cover h-auto w-full rounded-md border object-center"
             alt={data.title}
           />
           <figcaption
@@ -33,6 +41,12 @@ export default function NewsDetailSection({
             dangerouslySetInnerHTML={{ __html: data.title }}
           ></figcaption>
         </figure>
+        <div className="flex items-center justify-between text-sm">
+          <time className="font-bold" dateTime={readableDate}>
+            {readableDate}
+          </time>
+          <b className="flex gap-1">{data.readedCount} Okunma</b>
+        </div>
       </header>
       <div className="block w-full">
         <h2
@@ -44,6 +58,11 @@ export default function NewsDetailSection({
         className="prose block w-full max-w-none"
         dangerouslySetInnerHTML={{ __html: data.content || "" }}
       ></div>
+      <div className="flex items-start gap-1 text-sm font-bold">
+        <b>Kaynak</b>
+        <span>:</span>
+        <span>{data.sourceUrlLink}</span>
+      </div>
     </article>
   );
 }

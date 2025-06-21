@@ -1,8 +1,9 @@
+import { AddCategoryAction } from "@/Actions/Category.Actions";
 import CustomInput from "@/Components/UI/CustomInput";
-import { ModalComponentType, ResponseResult } from "@/Types";
+import { ModalComponentType } from "@/Types";
 import { slugUrl } from "@/Utils";
 import { Category } from "@prisma/client";
-import { useEffect } from "react";
+import { startTransition, useActionState, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -33,34 +34,32 @@ export default function AddCategoryModalComponent({
     mode: "onChange",
   });
 
+  const [state, action] = useActionState(AddCategoryAction, null);
+
   const categoryName = watch("categoryName");
 
   useEffect(() => {
     setValue("slugUrl", slugUrl(categoryName));
   }, [categoryName, setValue]);
 
-  const onSubmit: SubmitHandler<Category> = async (data) => {
-    const response = await fetch(`/api/categories`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify(data),
-    });
-    const result: ResponseResult<Category> = await response.json();
-    if (result.success) {
+  useEffect(() => {
+    if (state && state.success) {
       if (setIsOpened) {
         setIsOpened(false);
       }
-
       setIsUpdated((prev) => !prev);
-      return toast.success(
-        `${(result.data as Category).categoryName} Eklendi`,
-        { position: "top-right" },
-      );
+      toast.success(`${(state.data as Category).categoryName} Eklendi`, {
+        position: "top-right",
+      });
     } else {
-      return toast.error(result.error, { position: "top-right" });
+      toast.error(state?.error, { position: "top-right" });
     }
+  }, [state, setIsUpdated, setIsOpened]);
+
+  const onSubmit: SubmitHandler<Category> = async (data) => {
+    startTransition(() => {
+      action(data);
+    });
   };
 
   return (

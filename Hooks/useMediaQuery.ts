@@ -8,6 +8,7 @@ export default function useMediaQuery(query: string) {
       const media = window.matchMedia(query);
       setMatched(media.matches);
     };
+    handler();
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
   }, [query]);

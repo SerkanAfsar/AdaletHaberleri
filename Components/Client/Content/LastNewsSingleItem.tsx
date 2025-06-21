@@ -9,6 +9,7 @@ export default function LastNewsSingleItem({
   item: CategoryNewsListSingleItemType;
 }) {
   const imgUrl = GetImageUrlCdn(item.imageId!);
+  const imgPath = "medium" in imgUrl ? imgUrl.medium : imgUrl;
   return (
     <Link
       href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
@@ -16,7 +17,7 @@ export default function LastNewsSingleItem({
     >
       <div className="block w-full overflow-hidden border border-gray-200">
         <Image
-          src={imgUrl.medium}
+          src={imgPath}
           width={290}
           height={160}
           style={{

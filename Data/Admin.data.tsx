@@ -101,8 +101,8 @@ export const SourceListOptionValues: CustomOptionType[] = Object.keys(
 
 export const Users: UserType[] = [
   {
-    email: "serkan@deneme.com",
-    password: "123",
+    email: "serkanafsar84@gmail.com",
+    password: "1Q2w3E4r!",
     role: "Admin",
   },
   {

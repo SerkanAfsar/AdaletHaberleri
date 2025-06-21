@@ -1,5 +1,4 @@
 import { NewsListType } from "@/app/(Admin)/Admin/News/Containers/NewsContainer";
-
 import {
   CloudFlareResponseType,
   DeleteImageUrlType,
@@ -186,7 +185,7 @@ export async function DeleteNewsService({ id }: { id: number }) {
     };
     return responseResult;
   } catch (error: unknown) {
-    return errorHandler(error);
+    return errorHandler<News>(error);
   }
 }
 
@@ -216,6 +215,7 @@ export type NewsDetailPickType =
       Category: Category | null;
     })
   | null;
+
 export const GetNewsDetailByIdService = async ({ id }: { id: number }) => {
   try {
     const result = await prisma.news.findFirst({
@@ -311,3 +311,100 @@ export async function GetNewsDetailLastNewsListService({
     return errorHandler<number>(error);
   }
 }
+
+export async function LastNewsMainPageService() {
+  try {
+    const categories = await prisma.category.findMany({
+      where: {
+        Newses: {
+          some: {},
+        },
+      },
+      select: {
+        categoryName: true,
+        id: true,
+        Newses: {
+          select: {
+            title: true,
+            imageId: true,
+            createdAt: true,
+            subDescription: true,
+            id: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 6,
+        },
+      },
+
+      take: 5,
+    });
+    const responseResult: ResponseResult<typeof categories> = {
+      data: categories,
+      error: null,
+      success: true,
+      statusCode: 200,
+    };
+    return responseResult;
+  } catch (error) {
+    return errorHandler<Category>(error);
+  }
+}
+
+export const GetLastFiveNewsService = async () => {
+  try {
+    const result = await prisma.news.findMany({
+      include: {
+        Category: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 5,
+    });
+    if (!result) {
+      throw new Error("News Not Found");
+    }
+
+    const responseResult: ResponseResult<NewsDetailPickType> = {
+      data: result as NewsDetailPickType[],
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: 1,
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler<number>(error);
+  }
+};
+
+export const IncreaseReadedCountService = async ({ id }: { id: number }) => {
+  try {
+    const result = await prisma.news.update({
+      where: {
+        id,
+      },
+      data: {
+        readedCount: {
+          increment: 1,
+        },
+      },
+    });
+    if (!result) {
+      throw new Error("News Not Found");
+    }
+
+    const responseResult: ResponseResult<News> = {
+      data: result,
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: 1,
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler<News>(error);
+  }
+};

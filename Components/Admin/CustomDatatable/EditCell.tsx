@@ -44,32 +44,35 @@ export default function EditCell<T, V>({
     loader.done();
   }, []);
 
-  const handleDelete = useCallback(async ({ id }: { id: number }) => {
-    const confirmMessage = confirm(
-      "Seçili Veriyi Silmek İstediğinizden Emin misiniz?",
-    );
-    if (!confirmMessage) return;
-    loader.start();
-    const response = await fetch(`${fetchUrl}/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
-
-    const result: ResponseResult<T> = await response.json();
-    if (result.success) {
-      setItem(undefined);
-      setIsUpdated();
-
-      toast.success(`Veri Silindi`, {
-        position: "top-right",
+  const handleDelete = useCallback(
+    async ({ id }: { id: number }) => {
+      const confirmMessage = confirm(
+        "Seçili Veriyi Silmek İstediğinizden Emin misiniz?",
+      );
+      if (!confirmMessage) return;
+      loader.start();
+      const response = await fetch(`${fetchUrl}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
       });
-    } else {
-      toast.error(result.error, { position: "top-right" });
-    }
-    loader.done();
-  }, []);
+
+      const result: ResponseResult<T> = await response.json();
+      if (result.success) {
+        setItem(undefined);
+        setIsUpdated();
+
+        toast.success(`Veri Silindi`, {
+          position: "top-right",
+        });
+      } else {
+        toast.error(result.error, { position: "top-right" });
+      }
+      loader.done();
+    },
+    [fetchUrl, loader, setIsUpdated],
+  );
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { ResponseResult } from "@/Types";
-import { FooterLinkItemType } from "@/Types/Client.types";
+import { CategoryWithNewsType, FooterLinkItemType } from "@/Types/Client.types";
 import { errorHandler, generateCategoryUrl } from "@/Utils";
 import prisma from "@/Utils/db";
 import { Category, Prisma } from "@prisma/client";
@@ -251,5 +251,84 @@ export async function GetAllCategoriesFooterService() {
     return responseResult;
   } catch (error: unknown) {
     return errorHandler<number>(error);
+  }
+}
+
+// const deneme = {
+//   categoryName: true,
+//   id: true,
+//   seoTitle: true,
+//   seoDescription: true,
+//   slugUrl: true,
+// } satisfies Prisma.CategorySelect;
+
+// type Deneme = Prisma.CategoryGetPayload<{ select: typeof deneme }>;
+
+export async function GetCategoryDetailWithNews({
+  id,
+  page,
+}: {
+  id: number;
+  page: number;
+}) {
+  try {
+    const result = await prisma.category.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        categoryName: true,
+        id: true,
+        seoTitle: true,
+        seoDescription: true,
+        slugUrl: true,
+        Newses: {
+          select: {
+            id: true,
+            title: true,
+            imageId: true,
+            subDescription: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: Number(process.env.NEXT_PUBLIC_PAGINATION_ITEM_COUNT),
+          skip:
+            (page - 1) * Number(process.env.NEXT_PUBLIC_PAGINATION_ITEM_COUNT),
+        },
+      },
+    });
+    if (!result) {
+      throw new Error("Category Not Found");
+    }
+
+    const responseResult: ResponseResult<CategoryWithNewsType> = {
+      data: result,
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: await prisma.news.count({
+        where: {
+          categoryId: id,
+        },
+      }),
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler<Category>(error);
+  }
+}
+
+export async function GetHeaderBottomCategoryService() {
+  try {
+    const responseResult: ResponseResult<Category> = {
+      data: await prisma.category.findMany(),
+      success: true,
+      statusCode: 200,
+    };
+    return responseResult;
+  } catch (error) {
+    return errorHandler<Category>(error);
   }
 }

@@ -23,7 +23,7 @@ export default async function NewsDetailLastNewsList({
   return (
     <aside
       className={cn(
-        "bg-customGray sticky top-32 mb-14 flex h-auto flex-col rounded-md p-6 xl:mt-10 [&>article]:last:mb-0",
+        "bg-customGray sticky top-32 z-0 mb-14 flex h-auto flex-col rounded-md p-6 xl:mt-10 [&>article]:last:mb-0",
         className,
       )}
     >

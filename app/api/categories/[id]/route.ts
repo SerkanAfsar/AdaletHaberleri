@@ -1,8 +1,10 @@
+import { revalidateCustomTags } from "@/Actions";
 import {
   DeleteCategoryByIdService,
   GetCategoryByIdService,
   UpdateCategoryWithIdService,
 } from "@/Services";
+import { CacheNames } from "@/Utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -37,6 +39,13 @@ export async function DELETE(
   const result = await DeleteCategoryByIdService({
     id: Number(id),
   });
+  if (result.success) {
+    await revalidateCustomTags([
+      CacheNames.CategoryList,
+      CacheNames.MenuList,
+      CacheNames.HeaderBottomCategoryList,
+    ]);
+  }
 
   return NextResponse.json(result, { status: result.statusCode });
 }
