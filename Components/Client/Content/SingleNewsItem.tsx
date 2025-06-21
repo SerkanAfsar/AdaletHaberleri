@@ -5,6 +5,7 @@ import { cn, dateFormat, GetImageUrlCdn, slugUrl } from "@/Utils";
 
 import Image from "next/image";
 import Link from "next/link";
+import CustomImage from "../Common/CustomImage";
 
 export default function SingleNewsItem({
   item,
@@ -14,38 +15,41 @@ export default function SingleNewsItem({
   const { matched } = useMediaQuery("(max-width:768px)");
   const elem: typeof item.type = matched ? "big" : item.type;
 
-  const imgUrl = GetImageUrlCdn(item.imageId);
-
   const imgContent = () => {
     if (elem == "big") {
-      const imgPath = "large" in imgUrl ? imgUrl.large : imgUrl;
       return (
         <Link
           href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
           className="relative h-full w-full overflow-hidden border border-gray-400"
         >
-          <Image
-            src={imgPath}
+          <CustomImage
             width={800}
             height={300}
-            alt={item.title || "Haber"}
-            className="hover object-cover object-center transition-all hover:scale-105"
+            title={item.title}
+            imageId={item.imageId}
+            keyField="large"
+            className={
+              "hover object-cover object-center transition-all hover:scale-105"
+            }
           />
         </Link>
       );
     }
-    const imgPath = "medium" in imgUrl ? imgUrl.medium : imgUrl;
+
     return (
       <Link
         href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
         className="relative block shrink-0 grow-0 overflow-hidden border border-gray-400"
       >
-        <Image
-          src={imgPath}
+        <CustomImage
           width={150}
           height={85}
-          alt={item.title || "Haber"}
-          className="hover h-full object-cover object-center transition-all hover:scale-105"
+          title={item.title}
+          imageId={item.imageId}
+          keyField="medium"
+          className={
+            "hover h-full object-cover object-center transition-all hover:scale-105"
+          }
         />
       </Link>
     );

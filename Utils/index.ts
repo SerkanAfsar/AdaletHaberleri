@@ -44,6 +44,8 @@ export const slugUrl = (value: string): string => {
       .toLowerCase()
       .normalize("NFD") // ü -> u + ¨
       .replace("'", "-")
+      .replace(/&#039;/g, "")
+      .replace(/&039;/g, "")
       .replace(/['"]/g, "")
       .replace(/[\u0300-\u036f]/g, "") // ¨ gibi işaretleri sil
       .replace(/ç/g, "c")

@@ -9,6 +9,7 @@ import "swiper/css/effect-fade";
 import Image from "next/image";
 import { generateNewsUrl, GetImageUrlCdn } from "@/Utils";
 import Link from "next/link";
+import CustomImage from "../Common/CustomImage";
 
 export default function HeroSliderContent({
   items,
@@ -34,17 +35,16 @@ export default function HeroSliderContent({
         fadeEffect={{ crossFade: true }}
       >
         {items.map((item, index) => {
-          const img = GetImageUrlCdn(item?.imageId ?? "");
-          const newPath = "ExtraLarge" in img ? img.ExtraLarge : img;
           return (
             <SwiperSlide key={index} className="relative h-full w-full">
               <figure className="h-full w-full before:absolute before:inset-0 before:z-10 before:bg-black/20 before:content-['']">
-                <Image
+                <CustomImage
                   width={1500}
                   height={400}
-                  src={newPath}
-                  alt={item?.title ?? "Haber"}
+                  imageId={item?.imageId ?? null}
+                  title={item?.title ?? ""}
                   className="h-full w-full object-cover object-center"
+                  keyField="ExtraLarge"
                 />
 
                 <figcaption className="absolute right-0 bottom-0 left-0 z-10 block bg-red-500/90 p-5 text-white md:right-10 md:bottom-10 md:left-10">

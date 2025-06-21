@@ -1,29 +1,26 @@
 import { CategoryNewsListSingleItemType } from "@/Types/Client.types";
-import { dateFormat, GetImageUrlCdn, slugUrl } from "@/Utils";
+import { dateFormat, slugUrl } from "@/Utils";
 import Link from "next/link";
-import Image from "next/image";
+import CustomImage from "../Common/CustomImage";
 
 export default function LastNewsSingleItem({
   item,
 }: {
   item: CategoryNewsListSingleItemType;
 }) {
-  const imgUrl = GetImageUrlCdn(item.imageId!);
-  const imgPath = "medium" in imgUrl ? imgUrl.medium : imgUrl;
   return (
     <Link
       href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
       className="relative mb-4 flex h-full w-full shrink-0 grow-0 flex-col gap-2 overflow-hidden"
     >
       <div className="block w-full overflow-hidden border border-gray-200">
-        <Image
-          src={imgPath}
+        <CustomImage
+          imageId={item.imageId}
           width={290}
           height={160}
-          style={{
-            width: "100%",
-          }}
-          alt={item.title || "Haber"}
+          style={{ width: "100%" }}
+          title={item.title}
+          keyField="medium"
           className="hover object-cover object-center transition-all hover:scale-105"
         />
       </div>

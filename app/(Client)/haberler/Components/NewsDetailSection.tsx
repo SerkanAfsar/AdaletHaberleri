@@ -1,7 +1,6 @@
+import CustomImage from "@/Components/Client/Common/CustomImage";
 import { NewsDetailPickType } from "@/Services";
-import { cn, GetImageUrlCdn } from "@/Utils";
-
-import Image from "next/image";
+import { cn } from "@/Utils";
 
 export default function NewsDetailSection({
   data,
@@ -13,8 +12,7 @@ export default function NewsDetailSection({
   if (!data) {
     return null;
   }
-  const imgUrl = GetImageUrlCdn(data.imageId);
-  const imgPath = "large" in imgUrl ? imgUrl.large : imgUrl;
+
   const readableDate = new Date(data.createdAt).toLocaleDateString("tr-TR", {
     year: "numeric",
     month: "long",
@@ -29,12 +27,13 @@ export default function NewsDetailSection({
           dangerouslySetInnerHTML={{ __html: data.title }}
         ></h1>
         <figure className="block w-full">
-          <Image
-            src={imgPath}
+          <CustomImage
             width={835}
             height={470}
             className="object-fit-cover h-auto w-full rounded-md border object-center"
-            alt={data.title}
+            imageId={data.imageId}
+            keyField="large"
+            title={data.title}
           />
           <figcaption
             className="hidden"

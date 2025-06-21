@@ -1,22 +1,22 @@
 import { NewsLinkType } from "@/Types/Client.types";
-import { GetImageUrlCdn, slugUrl } from "@/Utils";
-import Image from "next/image";
+import { slugUrl } from "@/Utils";
+
 import Link from "next/link";
+import CustomImage from "../Common/CustomImage";
 
 export default function NewsMenuItem({ item }: { item: NewsLinkType }) {
-  const imgUrl = GetImageUrlCdn(item.imageId!);
-
   return (
     <Link
       href={`/haberler/${slugUrl(item.categoryName!)}/${slugUrl(item.title!)}/${item.id}`}
       className="flex w-full flex-col justify-items-start gap-1"
     >
       <div className="relative h-[130px] w-full">
-        <Image
-          src={imgUrl.small}
+        <CustomImage
+          imageId={item.imageId}
           className="object-cover object-center"
-          alt={item.title!}
+          title={item.title || "Haber"}
           fill
+          keyField="small"
         />
       </div>
       <span className="text-primary block text-left text-sm">

@@ -1,6 +1,7 @@
+import CustomImage from "@/Components/Client/Common/CustomImage";
 import { CategoryWithNewsType } from "@/Types/Client.types";
 import { generateNewsUrl, GetImageUrlCdn } from "@/Utils";
-import Image, from "next/image";
+
 import Link from "next/link";
 
 type CategoryNewsItemType = CategoryWithNewsType["Newses"][0];
@@ -12,20 +13,16 @@ export default function CategoryNewsItem({
   categoryName: string;
 }) {
   if (item) {
-    const newsImageSrc = GetImageUrlCdn(item.imageId);
-
-    const imgSource =
-      "large" in newsImageSrc ? newsImageSrc.large : newsImageSrc;
-
     return (
       <article className="relative flex w-full flex-col gap-3">
         <figure className="group relative block w-full overflow-hidden rounded-xl">
-          <Image
-            alt={item?.title || "Haber"}
-            src={imgSource}
-            width={400}
-            height={220}
+          <CustomImage
+            title={item.title}
+            imageId={item.imageId}
             className="block h-auto w-full object-cover object-center transition-all group-hover:scale-110"
+            width={400}
+            height={200}
+            keyField="large"
           />
           <figcaption className="hidden">{item?.title}</figcaption>
 
