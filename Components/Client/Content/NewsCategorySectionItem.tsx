@@ -1,6 +1,7 @@
+import dynamic from "next/dynamic";
 import { slugUrl } from "@/Utils";
-import SingleNewsItem from "./SingleNewsItem";
 import Link from "next/link";
+const SingleNewsItem = dynamic(() => import("./SingleNewsItem"));
 
 type TestType = { id: number; [key: string]: any };
 

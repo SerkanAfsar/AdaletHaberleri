@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { cn } from "@/Utils";
 import NewsMenuItem from "../../Content/NewsMenuItem";
 import {
@@ -6,7 +7,9 @@ import {
   NewsLinkType,
 } from "@/Types/Client.types";
 
-import CategoryMenuItem from "../../Content/CategoryMenuItem";
+const CategoryMenuItem = dynamic(
+  () => import("../../Content/CategoryMenuItem"),
+);
 
 export default function HeaderMenuItemList({
   item,

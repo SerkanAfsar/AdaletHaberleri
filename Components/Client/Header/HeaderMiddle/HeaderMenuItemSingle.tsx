@@ -1,11 +1,11 @@
 "use client";
+import dynamic from "next/dynamic";
 import { ChevronDown } from "lucide-react";
-
 import { useEffect, useState } from "react";
-
 import { usePathname } from "next/navigation";
 import { HeaderMiddleLinkType } from "@/Types/Client.types";
-import HeaderMenuItemNewsList from "./HeaderMenuItemList";
+
+const HeaderMenuItemNewsList = dynamic(() => import("./HeaderMenuItemList"));
 
 export default function HeaderMenuItemSingle({
   item,

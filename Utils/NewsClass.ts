@@ -3,7 +3,7 @@ import { CloudFlareResponseType, SiteSelectors } from "@/Types";
 import { CategorySourceUrl } from "@prisma/client";
 import { parse } from "node-html-parser";
 import prisma from "./db";
-import { getImageTypeFromPath, slugUrl } from ".";
+import { envVariables, getImageTypeFromPath, slugUrl } from ".";
 
 export class NewsClass {
   sourceList: CategorySourceUrl[];
@@ -127,11 +127,11 @@ export class NewsClass {
     form.append("requireSignedURLs", "false");
 
     const response = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.NEXT_PUBLIC_CDN_ACCOUNT_ID}/images/v1`,
+      `https://api.cloudflare.com/client/v4/accounts/${envVariables.NEXT_PUBLIC_CDN_ACCOUNT_ID}/images/v1`,
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_CDN_ACCOUNT_TOKEN}`,
+          Authorization: `Bearer ${envVariables.NEXT_PUBLIC_CDN_ACCOUNT_TOKEN}`,
         },
         body: form,
       },

@@ -1,9 +1,14 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
-import HeaderAsideRightSection from "./HeaderMiddleRightSection";
-import { HeaderMiddleNavSection } from "./HeaderMiddleNavSection";
+const HeaderAsideRightSection = dynamic(
+  () => import("./HeaderMiddleRightSection"),
+);
+const HeaderMiddleNavSection = dynamic(
+  () => import("./HeaderMiddleNavSection"),
+);
 
-export default async function HeaderMiddleSection() {
+export default function HeaderMiddleSection() {
   return (
     <section className="block w-full bg-white">
       <div className="relative container mx-auto flex items-center justify-between py-3 xl:py-0">

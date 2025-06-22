@@ -1,6 +1,8 @@
+import dynamic from "next/dynamic";
 import { GetLastFiveNewsCacheService } from "@/Caches/News.CacheService";
-import HeroSliderContent from "./HeroSliderContent";
 import { NewsDetailPickType } from "@/Services";
+
+const HeroSliderContent = dynamic(() => import("./HeroSliderContent"));
 
 export default async function HeroSlider() {
   const result = await GetLastFiveNewsCacheService();

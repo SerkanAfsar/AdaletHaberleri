@@ -1,6 +1,6 @@
 import CustomImage from "@/Components/Client/Common/CustomImage";
 import { CategoryWithNewsType } from "@/Types/Client.types";
-import { generateNewsUrl, GetImageUrlCdn } from "@/Utils";
+import { generateNewsUrl } from "@/Utils";
 
 import Link from "next/link";
 

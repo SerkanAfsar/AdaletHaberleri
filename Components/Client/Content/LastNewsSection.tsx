@@ -1,5 +1,6 @@
-import LastNewsSingleItem from "./LastNewsSingleItem";
+import dynamic from "next/dynamic";
 import { GetMainPageLastNewsService } from "@/Services/MainPageService";
+const LastNewsSingleItem = dynamic(() => import("./LastNewsSingleItem"));
 
 export default async function LastNewsSection() {
   const newsResponseResult = await GetMainPageLastNewsService();

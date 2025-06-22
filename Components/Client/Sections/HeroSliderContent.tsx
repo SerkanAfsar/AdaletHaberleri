@@ -6,8 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-import Image from "next/image";
-import { generateNewsUrl, GetImageUrlCdn } from "@/Utils";
+import { generateNewsUrl } from "@/Utils";
 import Link from "next/link";
 import CustomImage from "../Common/CustomImage";
 

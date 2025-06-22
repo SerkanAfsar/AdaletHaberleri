@@ -1,4 +1,5 @@
 import { ResponseResult } from "@/Types";
+import { envVariables } from "@/Utils";
 import {
   ColumnFiltersState,
   PaginationState,
@@ -32,7 +33,7 @@ export default function useGetCustomDatatableData<T extends object>({
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = new URL(fetchUrl, process.env.NEXT_PUBLIC_BASE_URL!);
+      const url = new URL(fetchUrl, envVariables.NEXT_PUBLIC_BASE_URL);
       url.searchParams.set(
         "offset",
         `${pagination.pageIndex * pagination.pageSize}`,

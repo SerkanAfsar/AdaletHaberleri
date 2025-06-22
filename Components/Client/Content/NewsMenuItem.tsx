@@ -1,8 +1,8 @@
+import dynamic from "next/dynamic";
 import { NewsLinkType } from "@/Types/Client.types";
 import { slugUrl } from "@/Utils";
-
 import Link from "next/link";
-import CustomImage from "../Common/CustomImage";
+const CustomImage = dynamic(() => import("../Common/CustomImage"));
 
 export default function NewsMenuItem({ item }: { item: NewsLinkType }) {
   return (

@@ -5,7 +5,7 @@ import {
   ResponseResult,
 } from "@/Types";
 import { FooterLinkItemType } from "@/Types/Client.types";
-import { errorHandler, generateNewsUrl } from "@/Utils";
+import { envVariables, errorHandler, generateNewsUrl } from "@/Utils";
 import prisma from "@/Utils/db";
 import { NewsClass } from "@/Utils/NewsClass";
 import { Category, News, Prisma } from "@prisma/client";
@@ -193,11 +193,11 @@ export async function DeleteNewsImageService(imageId?: string) {
   if (!imageId) {
     return false;
   }
-  const url: DeleteImageUrlType = `https://api.cloudflare.com/client/v4/accounts/${process.env.NEXT_PUBLIC_CDN_ACCOUNT_ID}/images/v1/${imageId}`;
+  const url: DeleteImageUrlType = `https://api.cloudflare.com/client/v4/accounts/${envVariables.NEXT_PUBLIC_CDN_ACCOUNT_ID}/images/v1/${imageId}`;
   const response = await fetch(url, {
     method: "DELETE",
     headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_CDN_ACCOUNT_TOKEN}`,
+      Authorization: `Bearer ${envVariables.NEXT_PUBLIC_CDN_ACCOUNT_TOKEN}`,
     },
   });
   if (response.ok) {

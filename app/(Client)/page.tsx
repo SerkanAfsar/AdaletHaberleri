@@ -1,6 +1,13 @@
-import LastNewsSection from "@/Components/Client/Content/LastNewsSection";
-import NewsCategorySectionWrapper from "@/Components/Client/Content/NewsCategorySectionWrapper";
-import HeroSlider from "@/Components/Client/Sections/HeroSlider";
+import dynamic from "next/dynamic";
+const LastNewsSection = dynamic(
+  () => import("../../Components/Client/Content/LastNewsSection"),
+);
+const NewsCategorySectionWrapper = dynamic(
+  () => import("../../Components/Client/Content/NewsCategorySectionWrapper"),
+);
+const HeroSlider = dynamic(
+  () => import("../../Components/Client/Sections/HeroSlider"),
+);
 
 export default async function Page() {
   return (

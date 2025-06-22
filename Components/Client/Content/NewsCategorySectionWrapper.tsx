@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
 import { GetLastNewsMainPageCacheService } from "@/Caches/News.CacheService";
-import NewsCategorySectionItem from "./NewsCategorySectionItem";
+const NewsCategorySectionItem = dynamic(
+  () => import("./NewsCategorySectionItem"),
+);
 
 export default async function NewsCategorySectionWrapper() {
   const result = await GetLastNewsMainPageCacheService();

@@ -21,7 +21,7 @@ export default function OtherCategories({ data }: { data: Category[] }) {
       />
       {isOpened && (
         <div className="absolute inset-0 top-[100%] container text-black">
-          <ul className="grid w-full grid-cols-5 gap-3 bg-white p-4 shadow">
+          <ul className="grid w-full gap-3 bg-white p-4 shadow lg:grid-cols-4 xl:grid-cols-5">
             {data.map((category: Category) => (
               <li key={category.id}>
                 <Link

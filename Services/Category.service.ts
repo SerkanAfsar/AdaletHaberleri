@@ -1,6 +1,6 @@
 import { ResponseResult } from "@/Types";
 import { CategoryWithNewsType, FooterLinkItemType } from "@/Types/Client.types";
-import { errorHandler, generateCategoryUrl } from "@/Utils";
+import { envVariables, errorHandler, generateCategoryUrl } from "@/Utils";
 import prisma from "@/Utils/db";
 import { Category, Prisma } from "@prisma/client";
 import { ColumnFiltersState, SortingState } from "@tanstack/react-table";
@@ -293,9 +293,8 @@ export async function GetCategoryDetailWithNews({
           orderBy: {
             createdAt: "desc",
           },
-          take: Number(process.env.NEXT_PUBLIC_PAGINATION_ITEM_COUNT),
-          skip:
-            (page - 1) * Number(process.env.NEXT_PUBLIC_PAGINATION_ITEM_COUNT),
+          take: envVariables.NEXT_PUBLIC_PAGINATION_ITEM_COUNT,
+          skip: (page - 1) * envVariables.NEXT_PUBLIC_PAGINATION_ITEM_COUNT,
         },
       },
     });

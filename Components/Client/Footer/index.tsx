@@ -1,8 +1,9 @@
+import dynamic from "next/dynamic";
 import {
   GetAllCategoriesFooterService,
   GetLastNewsByCountService,
 } from "@/Services";
-import FooterMenuSection from "./FooterMenuSection";
+const FooterMenuSection = dynamic(() => import("./FooterMenuSection"));
 
 export default async function Footer() {
   return (

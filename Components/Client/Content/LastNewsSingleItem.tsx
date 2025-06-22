@@ -1,7 +1,8 @@
+import dynamic from "next/dynamic";
 import { CategoryNewsListSingleItemType } from "@/Types/Client.types";
 import { dateFormat, slugUrl } from "@/Utils";
 import Link from "next/link";
-import CustomImage from "../Common/CustomImage";
+const CustomImage = dynamic(() => import("../Common/CustomImage"));
 
 export default function LastNewsSingleItem({
   item,

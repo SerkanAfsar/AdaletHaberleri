@@ -1,6 +1,7 @@
-import MobileMenuWrapper from "./MobileMenuWrapper";
+import dynamic from "next/dynamic";
 import { GetAllCategoriesCacheService } from "@/Caches/Category.CacheService";
 import { Category } from "@prisma/client";
+const MobileMenuWrapper = dynamic(() => import("./MobileMenuWrapper"));
 
 export default async function MobileMenu() {
   const result = await GetAllCategoriesCacheService();
