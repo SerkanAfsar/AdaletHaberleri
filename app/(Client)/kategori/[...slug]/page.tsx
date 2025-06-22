@@ -1,4 +1,4 @@
-import BreadCrumb from "@/Components/Client/Content/BreadCrumb";
+import BreadCrumb from "@/Components/Client/Common/BreadCrumb";
 import { GetCategoryDetailWithNews } from "@/Services";
 import { CategoryWithNewsType } from "@/Types/Client.types";
 import { generateCategoryUrl } from "@/Utils";

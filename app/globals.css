@@ -96,6 +96,9 @@ body {
   p {
     overflow-wrap: break-word;
   }
+  section[data-spacing="true"] {
+    @apply my-5;
+  }
 }
 
 @layer utilities {
@@ -128,5 +131,8 @@ body {
   }
   .breadCrumbItem {
     @apply [&>svg]:text-breadCrumbDividerColor last:text-breadCrumbDividerColor flex items-center justify-center last:[&>a]:line-clamp-1 [&>svg]:size-4 last:[&>svg]:hidden;
+  }
+  .swiperButtons {
+    @apply bg-primary flex cursor-pointer items-center justify-center p-3;
   }
 }

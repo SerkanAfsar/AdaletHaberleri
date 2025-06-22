@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { CategoryUrlListType } from "../Containers/CategoryUrlListContainer";
 import CustomSelect from "@/Components/UI/CustomSelect";
 import { SourceList } from "@/Data/Admin.data";
+import { useRouter } from "nextjs-toploader/app";
 
 const fetchCategoryName = async (value: string): Promise<boolean> => {
   const response = await fetch(`/api/categories/validate`, {
@@ -31,14 +32,12 @@ export default function CustomCategorUrlListEditModal({
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm<CategoryUrlListType>({
     mode: "onChange",
     defaultValues: item,
   });
-
+  const router = useRouter();
   const { customList } = metaData as any;
   const onSubmit: SubmitHandler<CategorySourceUrl> = async (data) => {
     const response = await fetch(`/api/categoryurl/${item?.id}`, {
@@ -49,6 +48,10 @@ export default function CustomCategorUrlListEditModal({
       body: JSON.stringify(data),
     });
     const result: ResponseResult<CategorySourceUrl> = await response.json();
+    if (result.statusCode == 401) {
+      toast.error(result.error, { position: "top-right" });
+      return router.push("/Login");
+    }
     if (result.success) {
       if (setItem) {
         setItem(undefined);

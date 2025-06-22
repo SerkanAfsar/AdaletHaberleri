@@ -4,14 +4,14 @@ import { NewsDetailPickType } from "@/Services";
 
 const HeroSliderContent = dynamic(() => import("./HeroSliderContent"));
 
-export default async function HeroSlider() {
+export default async function HeroSliderSection() {
   const result = await GetLastFiveNewsCacheService();
   if (!result.success) {
     return <div>{result.error}</div>;
   }
 
   return (
-    <section className="h-[450px] w-full">
+    <section data-spacing="true" className="container h-[450px] w-full">
       <HeroSliderContent items={(result.data as NewsDetailPickType[]) ?? []} />
     </section>
   );

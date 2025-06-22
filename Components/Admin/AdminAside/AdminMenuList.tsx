@@ -1,3 +1,4 @@
+import { ExitPanel } from "@/Actions";
 import { useAdminContext } from "@/Contexts/AdminContext";
 import { AdmiMenuList } from "@/Data/Admin.data";
 import { cn } from "@/Utils";
@@ -22,6 +23,12 @@ export default function AdminMenuList() {
                 "flex items-center justify-start gap-2 rounded px-4 py-2 whitespace-nowrap",
                 item.href == pathName ? "bg-blue-100 dark:bg-[#162042]" : "",
               )}
+              onClick={async (e) => {
+                if (item.isFunc) {
+                  e.preventDefault();
+                  await ExitPanel();
+                }
+              }}
               href={item.href}
               title={item.title}
             >

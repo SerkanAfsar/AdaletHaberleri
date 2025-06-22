@@ -1,3 +1,4 @@
+import { revalidateCustomTags } from "@/Actions";
 import { NewsListType } from "@/app/(Admin)/Admin/News/Containers/NewsContainer";
 import {
   CloudFlareResponseType,
@@ -5,7 +6,12 @@ import {
   ResponseResult,
 } from "@/Types";
 import { FooterLinkItemType } from "@/Types/Client.types";
-import { envVariables, errorHandler, generateNewsUrl } from "@/Utils";
+import {
+  CacheNames,
+  envVariables,
+  errorHandler,
+  generateNewsUrl,
+} from "@/Utils";
 import prisma from "@/Utils/db";
 import { NewsClass } from "@/Utils/NewsClass";
 import { Category, News, Prisma } from "@prisma/client";
@@ -395,6 +401,7 @@ export const IncreaseReadedCountService = async ({ id }: { id: number }) => {
     if (!result) {
       throw new Error("News Not Found");
     }
+    await revalidateCustomTags([CacheNames.MostReadedNews]);
 
     const responseResult: ResponseResult<News> = {
       data: result,
@@ -406,5 +413,30 @@ export const IncreaseReadedCountService = async ({ id }: { id: number }) => {
     return responseResult;
   } catch (error: unknown) {
     return errorHandler<News>(error);
+  }
+};
+
+export const GetMostReadedNewsService = async () => {
+  try {
+    const result = await prisma.news.findMany({
+      include: {
+        Category: true,
+      },
+      orderBy: {
+        readedCount: "desc",
+      },
+      take: 10,
+    });
+
+    const responseResult: ResponseResult<News> = {
+      data: result,
+      error: null,
+      statusCode: 200,
+      success: true,
+      totalCount: 1,
+    };
+    return responseResult;
+  } catch (error: unknown) {
+    return errorHandler<number>(error);
   }
 };

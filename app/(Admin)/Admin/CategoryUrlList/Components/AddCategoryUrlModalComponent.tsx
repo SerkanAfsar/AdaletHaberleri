@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { CategoryUrlListType } from "../Containers/CategoryUrlListContainer";
 import CustomSelect from "@/Components/UI/CustomSelect";
 import { SourceList } from "@/Data/Admin.data";
+import { useRouter } from "nextjs-toploader/app";
 
 const fetchCategoryName = async (value: string): Promise<boolean> => {
   const response = await fetch(`/api/categories/validate`, {
@@ -25,6 +26,7 @@ export default function AddCategoryUrlModalComponent({
   setIsOpened,
   metaData,
 }: ModalComponentType<CategoryUrlListType>) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -37,12 +39,6 @@ export default function AddCategoryUrlModalComponent({
 
   const { customList } = metaData as any;
 
-  // const categoryName = watch("categoryName");
-
-  //   useEffect(() => {
-  //     setValue("slugUrl", slugUrl(categoryName));
-  //   }, [categoryName, setValue]);
-
   const onSubmit: SubmitHandler<CategorySourceUrl> = async (data) => {
     const response = await fetch(`/api/categoryurl`, {
       method: "POST",
@@ -52,11 +48,16 @@ export default function AddCategoryUrlModalComponent({
       body: JSON.stringify(data),
     });
     const result: ResponseResult<CategorySourceUrl> = await response.json();
+
+    if (result.statusCode == 401) {
+      toast.error(result.error, { position: "top-right" });
+      return router.push("/Login");
+    }
+
     if (result.success) {
       if (setIsOpened) {
         setIsOpened(false);
       }
-
       setIsUpdated((prev) => !prev);
       return toast.success(
         `${(result.data as CategorySourceUrl).sourceUrl} Eklendi`,

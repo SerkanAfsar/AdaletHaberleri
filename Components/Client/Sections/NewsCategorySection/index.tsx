@@ -4,7 +4,7 @@ const NewsCategorySectionItem = dynamic(
   () => import("./NewsCategorySectionItem"),
 );
 
-export default async function NewsCategorySectionWrapper() {
+export default async function NewsCategorySection() {
   const result = await GetLastNewsMainPageCacheService();
   if (!result.success) {
     return <div>err</div>;
@@ -18,7 +18,7 @@ export default async function NewsCategorySectionWrapper() {
       return dateB.getTime() - dateA.getTime();
     });
   return (
-    <>
+    <div className="container">
       {sorted &&
         sorted.map((item: any, key: number) => (
           <NewsCategorySectionItem
@@ -28,6 +28,6 @@ export default async function NewsCategorySectionWrapper() {
             key={key}
           />
         ))}
-    </>
+    </div>
   );
 }

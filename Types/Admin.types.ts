@@ -7,6 +7,7 @@ export type AdminMenuType = {
   icon?: React.ReactNode;
   href: AdminMenuLinkType;
   isFunc?: boolean;
+  func?: any;
 };
 
 export type AdminMenuLinkType = `/Admin/${string}`;

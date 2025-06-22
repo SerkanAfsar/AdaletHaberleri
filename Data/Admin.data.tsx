@@ -64,6 +64,9 @@ export const AdmiMenuList: AdminMenuType[] = [
     title: "Güvenli Çıkış",
     icon: <LogOut className="size-5" />,
     isFunc: true,
+    func: async () => {
+      alert("deneme");
+    },
   },
 ];
 

@@ -7,7 +7,7 @@ import {
 import { notFound } from "next/navigation";
 import NewsDetailLastNewsList from "../Components/NewsDetailLastNewsList";
 import NewsDetailSection from "../Components/NewsDetailSection";
-import BreadCrumb from "@/Components/Client/Content/BreadCrumb";
+import BreadCrumb from "@/Components/Client/Common/BreadCrumb";
 import { generateCategoryUrl, generateNewsUrl } from "@/Utils";
 
 export default async function Page({

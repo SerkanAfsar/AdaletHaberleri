@@ -12,9 +12,9 @@ export default async function LastNewsSection() {
     categoryName: item.Category?.categoryName,
   }));
   return (
-    <section className="block w-full border-t border-gray-300 pt-10">
+    <section className="container block w-full border-t border-gray-300 pt-10">
       <h2 className="categoryTitle mb-4">Son Haberler</h2>
-      <div className="grid w-full gap-6 lg:grid-cols-4">
+      <div className="grid w-full gap-6 lg:grid-cols-3 xl:grid-cols-4">
         {result.map((item: any) => (
           <LastNewsSingleItem
             item={{ type: "small", ...item } as any}

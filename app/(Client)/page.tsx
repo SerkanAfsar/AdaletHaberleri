@@ -1,20 +1,25 @@
 import dynamic from "next/dynamic";
 const LastNewsSection = dynamic(
-  () => import("../../Components/Client/Content/LastNewsSection"),
+  () => import("../../Components/Client/Sections/LastNewsSection"),
 );
-const NewsCategorySectionWrapper = dynamic(
-  () => import("../../Components/Client/Content/NewsCategorySectionWrapper"),
+const NewsCategorySection = dynamic(
+  () => import("../../Components/Client/Sections/NewsCategorySection"),
 );
 const HeroSlider = dynamic(
-  () => import("../../Components/Client/Sections/HeroSlider"),
+  () => import("../../Components/Client/Sections/HeroSliderSection"),
+);
+
+const MostReaded = dynamic(
+  () => import("../../Components/Client/Sections/MostReadedSection"),
 );
 
 export default async function Page() {
   return (
-    <div className="container mx-auto pt-10">
+    <>
       <HeroSlider />
-      <NewsCategorySectionWrapper />
+      <NewsCategorySection />
+      <MostReaded />
       <LastNewsSection />
-    </div>
+    </>
   );
 }

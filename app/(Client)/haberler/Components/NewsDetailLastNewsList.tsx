@@ -1,4 +1,4 @@
-import SingleNewsItem from "@/Components/Client/Content/SingleNewsItem";
+import SingleNewsItem from "@/Components/Client/Common/SingleNewsItem";
 import { GetNewsDetailLastNewsListService } from "@/Services";
 import { cn } from "@/Utils";
 

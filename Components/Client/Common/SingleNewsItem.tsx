@@ -4,7 +4,7 @@ import useMediaQuery from "@/Hooks/useMediaQuery";
 import { CategoryNewsListSingleItemType } from "@/Types/Client.types";
 import { cn, dateFormat, slugUrl } from "@/Utils";
 import Link from "next/link";
-const CustomImage = dynamic(() => import("../Common/CustomImage"));
+const CustomImage = dynamic(() => import("./CustomImage"));
 
 export default function SingleNewsItem({
   item,
