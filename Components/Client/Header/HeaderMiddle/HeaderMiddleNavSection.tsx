@@ -1,11 +1,11 @@
 import dynamic from "next/dynamic";
 import { HeaderMiddleLinkType } from "@/Types/Client.types";
 
-import { GetMenuListService } from "@/Services/MainPageService";
+import { GetMenuListCacheService } from "@/CachingServices/News.CacheService";
 const HeaderMenuItem = dynamic(() => import("./HeaderMenuItemSingle"));
 
 export default async function HeaderMiddleNavSection() {
-  const result = await GetMenuListService();
+  const result = await GetMenuListCacheService();
 
   if (!result.success) {
     return <div>{result.message}</div>;
