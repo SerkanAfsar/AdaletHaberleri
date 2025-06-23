@@ -11,7 +11,10 @@ export default async function HeroSliderSection() {
   }
 
   return (
-    <section data-spacing="true" className="container h-[450px] w-full">
+    <section
+      data-spacing="true"
+      className="container h-[300px] w-full xl:h-[450px]"
+    >
       <HeroSliderContent items={(result.data as NewsDetailPickType[]) ?? []} />
     </section>
   );

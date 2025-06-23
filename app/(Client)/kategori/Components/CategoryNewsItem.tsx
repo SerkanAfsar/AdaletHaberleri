@@ -15,7 +15,7 @@ export default function CategoryNewsItem({
   if (item) {
     return (
       <article className="relative flex w-full flex-col gap-3">
-        <figure className="group relative block w-full overflow-hidden rounded-xl">
+        <figure className="group block w-full overflow-hidden rounded-xl">
           <CustomImage
             title={item.title}
             imageId={item.imageId}
@@ -27,7 +27,7 @@ export default function CategoryNewsItem({
           <figcaption className="hidden">{item?.title}</figcaption>
 
           <Link
-            className="absolute inset-0 indent-[-9999px]"
+            className="absolute inset-0 indent-[-9999px] before:absolute before:inset-0 before:content-['']"
             href={generateNewsUrl(categoryName, item.title, item.id)}
           >
             {item?.title}
@@ -35,7 +35,7 @@ export default function CategoryNewsItem({
         </figure>
         <header>
           <h2
-            className="line-clamp-2 block w-full text-left text-[15px] font-semibold uppercase"
+            className="line-clamp-2 block w-full text-left text-sm font-semibold uppercase"
             dangerouslySetInnerHTML={{ __html: item?.title || "Haber" }}
           ></h2>
           <h3 className="text-primary absolute top-4 left-4 rounded-md bg-white px-2 py-1 text-xs font-semibold uppercase shadow">

@@ -45,9 +45,9 @@ export default function HeroSliderContent({
                 keyField="ExtraLarge"
               />
 
-              <figcaption className="absolute right-0 bottom-0 left-0 z-10 block bg-red-500/90 p-5 text-white md:right-10 md:bottom-10 md:left-10">
+              <figcaption className="absolute right-0 bottom-10 left-0 z-10 block bg-red-500/80 p-4 text-white shadow md:right-10 md:left-10">
                 <Link
-                  className="font-semibold uppercase underline before:absolute before:inset-0 before:h-full before:w-full before:content-[''] lg:text-lg"
+                  className="font-semibold uppercase underline before:absolute before:inset-0 before:h-full before:w-full before:content-['']"
                   dangerouslySetInnerHTML={{
                     __html: item?.title || "Haber",
                   }}

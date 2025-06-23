@@ -15,8 +15,8 @@ export default async function HeaderBottomSection() {
   return (
     <section className="bg-primary hidden w-full text-sm text-white uppercase lg:block">
       <div className="relative container mx-auto flex items-center justify-between">
-        <MainCategories data={data.slice(0, 8)} />
-        <OtherCategories data={data.slice(8, data.length)} />
+        <MainCategories data={data.slice(0, 7)} />
+        <OtherCategories data={data.slice(7, data.length)} />
       </div>
     </section>
   );
