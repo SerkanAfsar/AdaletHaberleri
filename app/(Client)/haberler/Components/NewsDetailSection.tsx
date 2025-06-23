@@ -1,12 +1,12 @@
 import CustomImage from "@/Components/Client/Common/CustomImage";
-import { NewsDetailPickType } from "@/Services";
+import { Deneme } from "@/Services";
 import { cn } from "@/Utils";
 
 export default function NewsDetailSection({
   data,
   className,
 }: {
-  data: NewsDetailPickType;
+  data: Deneme;
   className: string;
 }) {
   if (!data) {

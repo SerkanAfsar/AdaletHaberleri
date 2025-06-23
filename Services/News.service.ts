@@ -222,21 +222,46 @@ export type NewsDetailPickType =
     })
   | null;
 
+const deneme = {
+  createdAt: true,
+  imageId: true,
+  title: true,
+  content: true,
+  subDescription: true,
+  seoTitle: true,
+  seoDescription: true,
+  readedCount: true,
+  sourceUrlLink: true,
+  id: true,
+  Category: {
+    select: {
+      Newses: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 6,
+      },
+      categoryName: true,
+      id: true,
+    },
+  },
+} satisfies Prisma.NewsSelect;
+
+export type Deneme = Prisma.NewsGetPayload<{ select: typeof deneme }>;
+
 export const GetNewsDetailByIdService = async ({ id }: { id: number }) => {
   try {
     const result = await prisma.news.findFirst({
       where: {
         id,
       },
-      include: {
-        Category: true,
-      },
+      select: deneme,
     });
     if (!result) {
       throw new Error("News Not Found");
     }
 
-    const responseResult: ResponseResult<NewsDetailPickType> = {
+    const responseResult: ResponseResult<Deneme> = {
       data: result,
       error: null,
       statusCode: 200,
@@ -245,7 +270,7 @@ export const GetNewsDetailByIdService = async ({ id }: { id: number }) => {
     };
     return responseResult;
   } catch (error: unknown) {
-    return errorHandler<number>(error);
+    return errorHandler<Deneme>(error);
   }
 };
 

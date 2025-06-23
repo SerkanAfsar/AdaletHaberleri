@@ -1,25 +1,16 @@
 import SingleNewsItem from "@/Components/Client/Common/SingleNewsItem";
-import { GetNewsDetailLastNewsListService } from "@/Services";
+import { Deneme } from "@/Services";
 import { cn } from "@/Utils";
 
-export type NewsDetailLastNewsListProps = {
-  categoryId: number;
-  className?: string;
-};
+type OtherNews = Deneme["Category"];
+
 export default async function NewsDetailLastNewsList({
-  categoryId,
+  list,
   className,
-}: NewsDetailLastNewsListProps) {
-  const result = await GetNewsDetailLastNewsListService({ categoryId });
-  if (!result.success) {
-    return <div>{result.error}</div>;
-  }
-
-  const data = (result.data as any[]).map((item) => ({
-    ...item,
-    categoryName: item.Category.categoryName,
-  }));
-
+}: {
+  list: OtherNews;
+  className: string;
+}) {
   return (
     <aside
       className={cn(
@@ -27,11 +18,21 @@ export default async function NewsDetailLastNewsList({
         className,
       )}
     >
-      <h2 className="mb-3 w-full text-xl font-bold text-black">
-        EN SON HABERLER
+      <h2 className="mb-3 w-full text-lg font-bold text-black">
+        {list?.categoryName} EN SON HABERLER
       </h2>
-      {data.map((item, index) => (
-        <SingleNewsItem item={item} key={index} />
+      {list?.Newses.map((item, index) => (
+        <SingleNewsItem
+          item={{
+            categoryName: list.categoryName,
+            createdAt: item.createdAt,
+            id: item.id,
+            imageId: item.imageId,
+            subDescription: item.subDescription,
+            title: item.title,
+          }}
+          key={index}
+        />
       ))}
     </aside>
   );

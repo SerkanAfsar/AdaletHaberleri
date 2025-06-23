@@ -1,7 +1,7 @@
 import {
+  Deneme,
   GetNewsDetailByIdService,
   IncreaseReadedCountService,
-  NewsDetailPickType,
 } from "@/Services";
 
 import { notFound } from "next/navigation";
@@ -10,7 +10,6 @@ import NewsDetailSection from "../Components/NewsDetailSection";
 import BreadCrumb from "@/Components/Client/Common/BreadCrumb";
 import { envVariables, generateCategoryUrl, generateNewsUrl } from "@/Utils";
 import { Metadata } from "next";
-import { News } from "@prisma/client";
 
 export async function generateMetadata({
   params,
@@ -22,7 +21,7 @@ export async function generateMetadata({
 
   const result = await GetNewsDetailByIdService({ id });
 
-  const data = result.data as News;
+  const data = result.data as Deneme;
 
   return {
     title: data.seoTitle,
@@ -75,7 +74,7 @@ export default async function Page({
   if (result.error) {
     return <div>{result.error}</div>;
   }
-  const data = result.data as NewsDetailPickType;
+  const data = result.data as Deneme;
   if (!data) {
     return notFound();
   }
@@ -90,7 +89,7 @@ export default async function Page({
             title: data.Category!.categoryName,
             url: generateCategoryUrl(
               data.Category!.categoryName,
-              data.categoryId!,
+              data.Category!.id,
             ),
           },
           {
@@ -107,7 +106,7 @@ export default async function Page({
         <NewsDetailSection className="flex-auto xl:flex-2/3" data={data} />
         <NewsDetailLastNewsList
           className="flex-auto self-start xl:flex-1/3"
-          categoryId={data.categoryId!}
+          list={data.Category}
         />
       </section>
     </>
