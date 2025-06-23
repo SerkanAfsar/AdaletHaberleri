@@ -233,18 +233,19 @@ const deneme = {
   readedCount: true,
   sourceUrlLink: true,
   id: true,
-  Category: {
-    select: {
-      Newses: {
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 6,
-      },
-      categoryName: true,
-      id: true,
-    },
-  },
+  categoryId: true,
+  // Category: {
+  //   select: {
+  //     Newses: {
+  //       orderBy: {
+  //         createdAt: "desc",
+  //       },
+  //       take: 6,
+  //     },
+  //     categoryName: true,
+  //     id: true,
+  //   },
+  // },
 } satisfies Prisma.NewsSelect;
 
 export type Deneme = Prisma.NewsGetPayload<{ select: typeof deneme }>;

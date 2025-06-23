@@ -1,12 +1,11 @@
-import { Deneme, IncreaseReadedCountService } from "@/Services";
-
+import { Deneme, GetCategoryDetailWithLastNews } from "@/Services";
 import { notFound } from "next/navigation";
 import NewsDetailLastNewsList from "../Components/NewsDetailLastNewsList";
 import NewsDetailSection from "../Components/NewsDetailSection";
-import BreadCrumb from "@/Components/Client/Common/BreadCrumb";
-import { envVariables, generateCategoryUrl, generateNewsUrl } from "@/Utils";
+import { envVariables } from "@/Utils";
 import { Metadata } from "next";
 import { GetNewsDetailByIdCacheService } from "@/CachingServices/News.CacheService";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   params,
@@ -75,12 +74,13 @@ export default async function Page({
   if (!data) {
     return notFound();
   }
-
-  await IncreaseReadedCountService({ id });
+  const lastNewsDataFunc = GetCategoryDetailWithLastNews({
+    id: data.categoryId!,
+  });
 
   return (
     <>
-      <BreadCrumb
+      {/* <BreadCrumb
         items={[
           {
             title: data.Category!.categoryName,
@@ -98,13 +98,20 @@ export default async function Page({
             ),
           },
         ]}
-      />
+      /> */}
       <section className="container mx-auto flex w-full flex-col gap-3 py-6 xl:flex-row">
-        <NewsDetailSection className="flex-auto xl:flex-2/3" data={data} />
-        <NewsDetailLastNewsList
-          className="flex-auto self-start xl:flex-1/3"
-          list={data.Category}
+        <NewsDetailSection
+          className="flex-auto grow-0 xl:flex-2/3"
+          data={data}
         />
+        <Suspense
+          fallback={<div className="flex-auto xl:flex-1/3">Loading...</div>}
+        >
+          <NewsDetailLastNewsList
+            className="flex-auto self-start xl:flex-1/3"
+            dataFunc={lastNewsDataFunc}
+          />
+        </Suspense>
       </section>
     </>
   );

@@ -1,16 +1,24 @@
+"use client";
 import SingleNewsItem from "@/Components/Client/Common/SingleNewsItem";
-import { Deneme } from "@/Services";
+import { CategoryDetailWithNewsType } from "@/Services";
+import { ResponseResult } from "@/Types";
+
 import { cn } from "@/Utils";
+import { use } from "react";
 
-type OtherNews = Deneme["Category"];
-
-export default async function NewsDetailLastNewsList({
-  list,
+export default function NewsDetailLastNewsList({
   className,
+  dataFunc,
 }: {
-  list: OtherNews;
   className: string;
+  dataFunc: any;
 }) {
+  const result: ResponseResult<CategoryDetailWithNewsType> = use(dataFunc);
+  if (!result.success) {
+    return <div>{result.error}</div>;
+  }
+  const data = result.data as CategoryDetailWithNewsType;
+  console.log(data);
   return (
     <aside
       className={cn(
@@ -19,12 +27,12 @@ export default async function NewsDetailLastNewsList({
       )}
     >
       <h2 className="mb-3 w-full text-lg font-bold text-black">
-        {list?.categoryName} EN SON HABERLER
+        {data.categoryName} EN SON HABERLER
       </h2>
-      {list?.Newses.map((item, index) => (
+      {data?.Newses?.map((item, index) => (
         <SingleNewsItem
           item={{
-            categoryName: list.categoryName,
+            categoryName: data.categoryName,
             createdAt: item.createdAt,
             id: item.id,
             imageId: item.imageId,

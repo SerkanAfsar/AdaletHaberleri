@@ -331,3 +331,34 @@ export async function GetHeaderBottomCategoryService() {
     return errorHandler<Category>(error);
   }
 }
+
+const CategoryDetailSelect = {
+  Newses: {
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 6,
+  },
+  categoryName: true,
+  id: true,
+} satisfies Prisma.CategorySelect;
+
+export type CategoryDetailWithNewsType = Prisma.CategoryGetPayload<{
+  select: typeof CategoryDetailSelect;
+}>;
+
+export async function GetCategoryDetailWithLastNews({ id }: { id: number }) {
+  try {
+    const responseResult: ResponseResult<CategoryDetailWithNewsType> = {
+      data: await prisma.category.findFirst({
+        where: { id },
+        select: CategoryDetailSelect,
+      }),
+      success: true,
+      statusCode: 200,
+    };
+    return responseResult;
+  } catch (error) {
+    return errorHandler<CategoryDetailWithNewsType>(error);
+  }
+}
