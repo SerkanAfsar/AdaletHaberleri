@@ -262,7 +262,7 @@ export const GetNewsDetailByIdService = async ({ id }: { id: number }) => {
     }
 
     const responseResult: ResponseResult<Deneme> = {
-      data: result,
+      data: result as Deneme,
       error: null,
       statusCode: 200,
       success: true,

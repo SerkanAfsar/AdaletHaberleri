@@ -1,8 +1,4 @@
-import {
-  Deneme,
-  GetNewsDetailByIdService,
-  IncreaseReadedCountService,
-} from "@/Services";
+import { Deneme, IncreaseReadedCountService } from "@/Services";
 
 import { notFound } from "next/navigation";
 import NewsDetailLastNewsList from "../Components/NewsDetailLastNewsList";
@@ -10,6 +6,7 @@ import NewsDetailSection from "../Components/NewsDetailSection";
 import BreadCrumb from "@/Components/Client/Common/BreadCrumb";
 import { envVariables, generateCategoryUrl, generateNewsUrl } from "@/Utils";
 import { Metadata } from "next";
+import { GetNewsDetailByIdCacheService } from "@/CachingServices/News.CacheService";
 
 export async function generateMetadata({
   params,
@@ -19,7 +16,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const id = Number(slug[2]);
 
-  const result = await GetNewsDetailByIdService({ id });
+  const result = await GetNewsDetailByIdCacheService({ id });
 
   const data = result.data as Deneme;
 
@@ -70,7 +67,7 @@ export default async function Page({
     return notFound();
   }
 
-  const result = await GetNewsDetailByIdService({ id });
+  const result = await GetNewsDetailByIdCacheService({ id });
   if (result.error) {
     return <div>{result.error}</div>;
   }

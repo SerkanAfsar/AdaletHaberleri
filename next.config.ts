@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     staleTimes: {
       dynamic: 0,
     },
+    useCache: true,
   },
   images: {
     domains: ["imagedelivery.net"],

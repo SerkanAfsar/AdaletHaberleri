@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { GetLastNewsMainPageCacheService } from "@/Caches/News.CacheService";
+import { GetLastNewsMainPageCacheService } from "@/CachingServices/News.CacheService";
 const NewsCategorySectionItem = dynamic(
   () => import("./NewsCategorySectionItem"),
 );
