@@ -1,3 +1,5 @@
+import { envVariables } from "@/Utils";
+import { Metadata } from "next";
 import dynamic from "next/dynamic";
 const LastNewsSection = dynamic(
   () => import("../../Components/Client/Sections/LastNewsSection"),
@@ -13,6 +15,40 @@ const MostReaded = dynamic(
   () => import("../../Components/Client/Sections/MostReadedSection"),
 );
 
+export const metadata: Metadata = {
+  title: "Güncel Hukuk Haberleri | Adalet Haberleri",
+  description: "Güncel Hukuk Haberleri | Adalet Haberleri",
+  robots: "index,follow",
+  publisher: "Adalet Haberleri",
+  authors: [
+    {
+      name: "Adalet Haberleri",
+      url: envVariables.NEXT_PUBLIC_BASE_URL,
+    },
+  ],
+
+  openGraph: {
+    title: "Güncel Hukuk Haberleri | Adalet Haberleri",
+    description: "Güncel Hukuk Haberleri | Adalet Haberleri",
+    url: envVariables.NEXT_PUBLIC_BASE_URL,
+    locale: "tr_TR",
+    siteName: "Adalet Haberleri",
+    authors: ["Adalet Haberleri"],
+    emails: ["info@adalethaberleri.com"],
+  },
+
+  twitter: {
+    card: "summary",
+    description: "Güncel Hukuk Haberleri | Adalet Haberleri",
+    title: "Güncel Hukuk Haberleri | Adalet Haberleri",
+    creator: "@adalethaberleri",
+  },
+
+  alternates: {
+    canonical: envVariables.NEXT_PUBLIC_BASE_URL,
+  },
+};
+
 export default async function Page() {
   return (
     <>
@@ -23,3 +59,5 @@ export default async function Page() {
     </>
   );
 }
+
+export const revalidate = 7200;

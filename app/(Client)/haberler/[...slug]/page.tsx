@@ -8,7 +8,56 @@ import { notFound } from "next/navigation";
 import NewsDetailLastNewsList from "../Components/NewsDetailLastNewsList";
 import NewsDetailSection from "../Components/NewsDetailSection";
 import BreadCrumb from "@/Components/Client/Common/BreadCrumb";
-import { generateCategoryUrl, generateNewsUrl } from "@/Utils";
+import { envVariables, generateCategoryUrl, generateNewsUrl } from "@/Utils";
+import { Metadata } from "next";
+import { News } from "@prisma/client";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const id = Number(slug[2]);
+
+  const result = await GetNewsDetailByIdService({ id });
+
+  const data = result.data as News;
+
+  return {
+    title: data.seoTitle,
+    description: data.seoDescription,
+    robots: "index,follow",
+    publisher: "Adalet Haberleri",
+    authors: [
+      {
+        name: "Adalet Haberleri",
+        url: envVariables.NEXT_PUBLIC_BASE_URL,
+      },
+    ],
+
+    openGraph: {
+      title: data.seoTitle ?? "Adalet Haberleri",
+      description: data.seoDescription ?? "Adalet Haberleri",
+      url: `${envVariables.NEXT_PUBLIC_BASE_URL}/${slug.join("/")}`,
+      locale: "tr_TR",
+      siteName: "Adalet Haberleri",
+      authors: ["Adalet Haberleri"],
+      emails: ["info@adalethaberleri.com"],
+    },
+
+    twitter: {
+      card: "summary",
+      description: data.seoDescription ?? "Adalet Haberleri",
+      title: data.seoTitle ?? "Adalet Haberleri",
+      creator: "@adalethaberleri",
+    },
+
+    alternates: {
+      canonical: `${envVariables.NEXT_PUBLIC_BASE_URL}/${slug.join("/")}`,
+    },
+  };
+}
 
 export default async function Page({
   params,

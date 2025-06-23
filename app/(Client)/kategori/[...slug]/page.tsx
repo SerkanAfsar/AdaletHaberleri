@@ -1,13 +1,62 @@
 import BreadCrumb from "@/Components/Client/Common/BreadCrumb";
-import { GetCategoryDetailWithNews } from "@/Services";
+import { GetCategoryByIdService, GetCategoryDetailWithNews } from "@/Services";
 import { CategoryWithNewsType } from "@/Types/Client.types";
-import { generateCategoryUrl } from "@/Utils";
+import { envVariables, generateCategoryUrl } from "@/Utils";
 import { notFound } from "next/navigation";
 import CategoryTitle from "../Components/CategoryTitle";
 
 import CategoryNewsItem from "../Components/CategoryNewsItem";
 import CategoryPagination from "../Components/CategoryPagination";
 import CategoryNewsWrapper from "../Components/CategoryNewsWrapper";
+import { Metadata } from "next";
+import { Category } from "@prisma/client";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const categoryId = Number(slug[1]);
+
+  const result = await GetCategoryByIdService({ id: categoryId });
+
+  const data = result.data as Category;
+
+  return {
+    title: data.seoTitle,
+    description: data.seoDescription,
+    robots: "index,follow",
+    publisher: "Adalet Haberleri",
+    authors: [
+      {
+        name: "Adalet Haberleri",
+        url: envVariables.NEXT_PUBLIC_BASE_URL,
+      },
+    ],
+
+    openGraph: {
+      title: data.seoTitle ?? "Adalet Haberleri",
+      description: data.seoDescription ?? "Adalet Haberleri",
+      url: `${envVariables.NEXT_PUBLIC_BASE_URL}/${slug.join("/")}`,
+      locale: "tr_TR",
+      siteName: "Adalet Haberleri",
+      authors: ["Adalet Haberleri"],
+      emails: ["info@adalethaberleri.com"],
+    },
+
+    twitter: {
+      card: "summary",
+      description: data.seoDescription ?? "Adalet Haberleri",
+      title: data.seoTitle ?? "Adalet Haberleri",
+      creator: "@adalethaberleri",
+    },
+
+    alternates: {
+      canonical: `${envVariables.NEXT_PUBLIC_BASE_URL}/${slug.join("/")}`,
+    },
+  };
+}
 
 export default async function Page({
   params,

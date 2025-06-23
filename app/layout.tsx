@@ -28,7 +28,7 @@ export default function RootLayout({
         {children}
         <ToastContainer />
         <NextTopLoader
-          color="#2299DD"
+          color="#CE0F2E"
           height={3}
           showSpinner={true}
           zIndex={1600}
