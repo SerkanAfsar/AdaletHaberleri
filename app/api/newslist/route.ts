@@ -1,4 +1,4 @@
-import { revalidateCustomTags } from "@/Actions";
+import { revalidateCustomPath, revalidateCustomTags } from "@/Actions";
 import { GetCategoryNewsListWithCategorySources } from "@/Services/News.service";
 import { CacheNames } from "@/Utils";
 import { NextResponse } from "next/server";
@@ -10,5 +10,6 @@ export async function GET() {
     CacheNames.LastFiveNews,
     CacheNames.LastSectionNews,
   ]);
+  await revalidateCustomPath("/");
   return NextResponse.json(result);
 }

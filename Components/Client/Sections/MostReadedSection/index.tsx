@@ -1,9 +1,8 @@
-import { GetMostReadedCacheService } from "@/Caches/News.CacheService";
 import MostReadedSlider from "./MostReadedSlider";
-import { NewsDetailPickType } from "@/Services";
+import { GetMostReadedNewsService, NewsDetailPickType } from "@/Services";
 
 export default async function MoesReadedSection() {
-  const result = await GetMostReadedCacheService();
+  const result = await GetMostReadedNewsService();
   if (!result.success) {
     return <div>{result.error}</div>;
   }

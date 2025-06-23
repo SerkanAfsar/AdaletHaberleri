@@ -1,14 +1,15 @@
 import dynamic from "next/dynamic";
-import { GetHeaderBottomCategoryCacheService } from "@/Caches/Category.CacheService";
+
 import { Category } from "@prisma/client";
+import { GetHeaderBottomCategoryService } from "@/Services";
 
 const OtherCategories = dynamic(() => import("./OtherCategories"));
 const MainCategories = dynamic(() => import("./MainCategories"));
 
 export default async function HeaderBottomSection() {
-  const result = await GetHeaderBottomCategoryCacheService();
+  const result = await GetHeaderBottomCategoryService();
   if (result.error) {
-    return <div>{result.message}</div>;
+    return <div className="text-red-500">{result.message} Hata</div>;
   }
   const data = result.data as Category[];
 
