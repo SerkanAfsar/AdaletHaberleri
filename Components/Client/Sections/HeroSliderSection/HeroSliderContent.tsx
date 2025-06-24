@@ -28,8 +28,8 @@ export default function HeroSliderContent({
       }}
       navigation
       pagination={{ clickable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
+      // onSwiper={(swiper) => console.log(swiper)}
+      // onSlideChange={() => console.log("slide change")}
       fadeEffect={{ crossFade: true }}
     >
       {items.map((item, index) => {

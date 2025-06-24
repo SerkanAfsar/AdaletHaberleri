@@ -18,7 +18,7 @@ export default function NewsDetailLastNewsList({
     return <div>{result.error}</div>;
   }
   const data = result.data as CategoryDetailWithNewsType;
-  console.log(data);
+
   return (
     <aside
       className={cn(

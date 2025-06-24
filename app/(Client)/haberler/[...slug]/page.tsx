@@ -4,8 +4,9 @@ import NewsDetailLastNewsList from "../Components/NewsDetailLastNewsList";
 import NewsDetailSection from "../Components/NewsDetailSection";
 import { envVariables } from "@/Utils";
 import { Metadata } from "next";
-import { GetNewsDetailByIdCacheService } from "@/CachingServices/News.CacheService";
+
 import { Suspense } from "react";
+import { NewsDetailCacheService } from "@/CachingServices/News.CacheService";
 
 export async function generateMetadata({
   params,
@@ -15,8 +16,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const id = Number(slug[2]);
 
-  const result = await GetNewsDetailByIdCacheService({ id });
-
+  const result = await NewsDetailCacheService({ id });
   const data = result.data as Deneme;
 
   return {
@@ -66,7 +66,7 @@ export default async function Page({
     return notFound();
   }
 
-  const result = await GetNewsDetailByIdCacheService({ id });
+  const result = await NewsDetailCacheService({ id });
   if (result.error) {
     return <div>{result.error}</div>;
   }
