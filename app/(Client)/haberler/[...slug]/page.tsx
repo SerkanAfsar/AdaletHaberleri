@@ -1,11 +1,10 @@
-import { Deneme, GetCategoryDetailWithLastNews } from "@/Services";
+import { Deneme } from "@/Services";
 import { notFound } from "next/navigation";
 import NewsDetailLastNewsList from "../Components/NewsDetailLastNewsList";
 import NewsDetailSection from "../Components/NewsDetailSection";
 import { envVariables } from "@/Utils";
 import { Metadata } from "next";
 
-import { Suspense } from "react";
 import { NewsDetailCacheService } from "@/CachingServices/News.CacheService";
 
 export async function generateMetadata({
@@ -74,9 +73,6 @@ export default async function Page({
   if (!data) {
     return notFound();
   }
-  const lastNewsDataFunc = GetCategoryDetailWithLastNews({
-    id: data.categoryId!,
-  });
 
   return (
     <>
@@ -104,14 +100,15 @@ export default async function Page({
           className="flex-auto grow-0 xl:flex-2/3"
           data={data}
         />
-        <Suspense
+        {/* <Suspense
           fallback={<div className="flex-auto xl:flex-1/3">Loading...</div>}
         >
-          <NewsDetailLastNewsList
-            className="flex-auto self-start xl:flex-1/3"
-            dataFunc={lastNewsDataFunc}
-          />
-        </Suspense>
+          
+        </Suspense> */}
+        <NewsDetailLastNewsList
+          className="flex-auto self-start xl:flex-1/3"
+          categoryId={data.categoryId!}
+        />
       </section>
     </>
   );

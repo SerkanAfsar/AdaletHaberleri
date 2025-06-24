@@ -1,19 +1,20 @@
-"use client";
+import { CategoryLastNewsCacheResult } from "@/CachingServices/Category.CacheService";
 import SingleNewsItem from "@/Components/Client/Common/SingleNewsItem";
 import { CategoryDetailWithNewsType } from "@/Services";
 import { ResponseResult } from "@/Types";
 
 import { cn } from "@/Utils";
-import { use } from "react";
 
-export default function NewsDetailLastNewsList({
+export default async function NewsDetailLastNewsList({
   className,
-  dataFunc,
+  categoryId,
 }: {
   className: string;
-  dataFunc: any;
+  categoryId: number;
 }) {
-  const result: ResponseResult<CategoryDetailWithNewsType> = use(dataFunc);
+  const result: ResponseResult<CategoryDetailWithNewsType> =
+    await CategoryLastNewsCacheResult({ id: categoryId });
+
   if (!result.success) {
     return <div>{result.error}</div>;
   }
@@ -26,7 +27,7 @@ export default function NewsDetailLastNewsList({
         className,
       )}
     >
-      <h2 className="mb-3 w-full text-lg font-bold text-black">
+      <h2 className="mb-3 w-full text-lg font-bold text-black uppercase">
         {data.categoryName} EN SON HABERLER
       </h2>
       {data?.Newses?.map((item, index) => (

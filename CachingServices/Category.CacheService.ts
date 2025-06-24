@@ -1,5 +1,6 @@
 import {
   GetAllCategoriesListService,
+  GetCategoryDetailWithLastNews,
   GetHeaderBottomCategoryService,
 } from "@/Services";
 
@@ -23,3 +24,15 @@ export const GetHeaderBottomCategoryCacheService = cache(
     tags: [CacheNames.HeaderBottomCategoryList],
   },
 );
+
+export const CategoryLastNewsResult = ({ id }: { id: number }) =>
+  cache(GetCategoryDetailWithLastNews, [id.toString()], {
+    revalidate: 3600,
+    tags: ["CategoryLastNews"],
+  });
+
+export const CategoryLastNewsCacheResult = async ({ id }: { id: number }) => {
+  const cacheFunc = CategoryLastNewsResult({ id });
+  const result = await cacheFunc({ id });
+  return result;
+};
