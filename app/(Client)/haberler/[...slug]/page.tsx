@@ -100,13 +100,9 @@ export default async function Page({
           className="flex-auto grow-0 xl:flex-2/3"
           data={data}
         />
-        {/* <Suspense
-          fallback={<div className="flex-auto xl:flex-1/3">Loading...</div>}
-        >
-          
-        </Suspense> */}
+
         <NewsDetailLastNewsList
-          className="flex-auto self-start xl:flex-1/3"
+          className="mt-6 w-full flex-auto self-start min-xl:mt-0 xl:flex-1/3"
           categoryId={data.categoryId!}
         />
       </section>

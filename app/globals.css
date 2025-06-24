@@ -33,6 +33,7 @@
 
   --animate-fromTop: fromTop 0.2s ease-in-out;
   --animate-fadeReverce: fadeReverce 1s ease-in-out;
+  --spacing: 0.25rem;
 
   @keyframes fromTop {
     0% {
@@ -113,8 +114,9 @@ body {
   .container {
     @apply mx-auto;
     padding-inline: 2rem;
-    @variant lg {
-      padding-inline: 8rem;
+    @variant xl {
+      max-width: 80rem;
+      padding-inline: 0;
     }
   }
   .border4 {
