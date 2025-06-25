@@ -13,12 +13,15 @@ const HeaderTop = dynamic(
 const MobileMenu = dynamic(() => import("../../Components/Client/MobileMenu"));
 
 import MobileMenuContext from "@/Contexts/MobileMenuContext";
+import HeaderTopWrapper from "@/Components/Client/Header/HeaderTop/HeaderTopWrapper";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <MobileMenuContext>
       <Header>
-        <HeaderTop />
+        <HeaderTop>
+          <HeaderTopWrapper />
+        </HeaderTop>
         <HeaderMiddleSection />
         <HeaderBottomSection />
       </Header>

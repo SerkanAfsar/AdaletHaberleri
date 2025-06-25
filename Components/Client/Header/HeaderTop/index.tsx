@@ -1,10 +1,8 @@
 "use client";
 import useScrolledElement from "@/Hooks/useScrolledElement";
-import { CircleUserRound, Scroll, Sun } from "lucide-react";
-import Link from "next/link";
 import { useRef } from "react";
 
-export default function HeaderTop() {
+export default function HeaderTop({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLElement | null>(null);
   const { isScrolled } = useScrolledElement(ref);
   return (
@@ -19,38 +17,7 @@ export default function HeaderTop() {
           : {}
       }
     >
-      <div className="flex-co container flex items-center justify-between">
-        <ul className="flexCenter gap-3 font-semibold text-gray-600">
-          <li>
-            <Link title="Adalet Haberleri" href={"/"} className="block py-3">
-              Anasayfa
-            </Link>
-          </li>
-          <li>
-            <Link title="Adalet Haberleri" href={"/"} className="block py-3">
-              Hakkımızda
-            </Link>
-          </li>
-          <li>
-            <Link href={"/"} title="Adalet Haberleri" className="block py-3">
-              İletişim
-            </Link>
-          </li>
-        </ul>
-        <ul className="flexCenter gap-3 font-bold">
-          <li className="flexCenter gap-3">
-            <Scroll size={20} />
-            <span>Son Haberler</span>
-          </li>
-          <li className="flexCenter gap-3">
-            <CircleUserRound size={20} />
-            <span>Admin Panel</span>
-          </li>
-          <li className="flexCenter rounded-full border border-gray-500 p-1">
-            <Sun size={20} />
-          </li>
-        </ul>
-      </div>
+      {children}
     </section>
   );
 }
