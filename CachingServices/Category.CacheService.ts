@@ -1,4 +1,5 @@
 import {
+  GetAllCategoriesFooterService,
   GetAllCategoriesListService,
   GetCategoryDetailWithLastNews,
   GetHeaderBottomCategoryService,
@@ -36,3 +37,11 @@ export const CategoryLastNewsCacheResult = async ({ id }: { id: number }) => {
   const result = await cacheFunc({ id });
   return result;
 };
+export const GetAllCategoriesFooterCacheService = cache(
+  GetAllCategoriesFooterService,
+  undefined,
+  {
+    revalidate: 7200,
+    tags: [CacheNames.CategoryList],
+  },
+);

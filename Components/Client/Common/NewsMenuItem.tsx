@@ -1,13 +1,14 @@
 import dynamic from "next/dynamic";
 import { NewsLinkType } from "@/Types/Client.types";
-import { slugUrl } from "@/Utils";
+import { generateNewsUrl } from "@/Utils";
 import Link from "next/link";
 const CustomImage = dynamic(() => import("./CustomImage"));
 
 export default function NewsMenuItem({ item }: { item: NewsLinkType }) {
   return (
     <Link
-      href={`/haberler/${slugUrl(item.categoryName!)}/${slugUrl(item.title!)}/${item.id}`}
+      title={item.title!}
+      href={generateNewsUrl(item.categoryName!, item.title!, item.id!)}
       className="flex w-full flex-col justify-items-start gap-1"
     >
       <div className="relative h-[130px] w-full">

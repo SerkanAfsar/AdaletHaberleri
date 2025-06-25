@@ -1,8 +1,6 @@
 import dynamic from "next/dynamic";
-import {
-  GetAllCategoriesFooterService,
-  GetLastNewsByCountService,
-} from "@/Services";
+import { GetLastNewsByCountService } from "@/Services";
+import { GetAllCategoriesFooterCacheService } from "@/CachingServices/Category.CacheService";
 const FooterMenuSection = dynamic(() => import("./FooterMenuSection"));
 
 export default async function Footer() {
@@ -16,7 +14,7 @@ export default async function Footer() {
           direction="col"
         />
         <FooterMenuSection
-          service={GetAllCategoriesFooterService()}
+          service={GetAllCategoriesFooterCacheService()}
           className="lg:col-span-3"
           title="KATEGORİLER"
           textClass="text-lg"
