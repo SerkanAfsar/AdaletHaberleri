@@ -3,6 +3,7 @@ import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import NextTopLoader from "nextjs-toploader";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -33,6 +34,23 @@ export default function RootLayout({
           showSpinner={true}
           zIndex={1600}
         />
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=G-EF71XJ5DN7`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-EF71XJ5DN7');
+            `}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );
