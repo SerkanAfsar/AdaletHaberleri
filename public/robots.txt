@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.adalethaberleri.net
+
+# Sitemaps
+Sitemap: https://www.adalethaberleri.net/sitemap.xml
