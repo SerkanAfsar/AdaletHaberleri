@@ -63,6 +63,9 @@ export const GetMenuListService = async () => {
             imageId: true,
             id: true,
           },
+          orderBy: {
+            createdAt: "desc",
+          },
         },
       },
       take: 5,
