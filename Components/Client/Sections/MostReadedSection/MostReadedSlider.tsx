@@ -53,10 +53,18 @@ export default function MostReadedSlider({ items }: { items: any[] }) {
         })}
       </Swiper>
       <div className="mr-auto mb-4 flex gap-2 text-white">
-        <button className="swiperButtons swiper-button-prev-custom">
+        <button
+          type="button"
+          aria-label="Önceki"
+          className="swiperButtons swiper-button-prev-custom"
+        >
           <ChevronLeft />
         </button>
-        <button className="swiperButtons swiper-button-next-custom">
+        <button
+          aria-label="Sonraki"
+          type="button"
+          className="swiperButtons swiper-button-next-custom"
+        >
           <ChevronRight />
         </button>
       </div>
