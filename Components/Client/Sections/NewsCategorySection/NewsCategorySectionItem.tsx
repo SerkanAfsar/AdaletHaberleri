@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { slugUrl } from "@/Utils";
+import { generateCategoryUrl } from "@/Utils";
 import Link from "next/link";
 const SingleNewsItem = dynamic(() => import("../../Common/SingleNewsItem"));
 
@@ -20,7 +20,8 @@ export default function NewsCategorySectionItem<
     <section className="grid w-full grid-cols-5 gap-6 border-t border-gray-300 py-10 first:border-none">
       <h2 className="categoryTitle">
         <Link
-          href={`/kategori/${slugUrl(`${list[0].categoryName} haberleri`)}/${id}`}
+          title={list[0].categoryName}
+          href={generateCategoryUrl(list[0].categoryName, id)}
         >
           {list[0].categoryName}
         </Link>

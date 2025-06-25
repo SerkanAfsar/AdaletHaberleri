@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import useMediaQuery from "@/Hooks/useMediaQuery";
 import { CategoryNewsListSingleItemType } from "@/Types/Client.types";
-import { cn, dateFormat, slugUrl } from "@/Utils";
+import { cn, dateFormat, generateNewsUrl } from "@/Utils";
 import Link from "next/link";
 const CustomImage = dynamic(() => import("./CustomImage"));
 
@@ -18,7 +18,8 @@ export default function SingleNewsItem({
     if (elem == "big") {
       return (
         <Link
-          href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
+          title={item.title}
+          href={generateNewsUrl(item.categoryName, item.title, item.id)}
           className="relative h-full w-full overflow-hidden border border-gray-400"
         >
           <CustomImage
@@ -37,7 +38,8 @@ export default function SingleNewsItem({
 
     return (
       <Link
-        href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
+        title={item.title}
+        href={generateNewsUrl(item.categoryName, item.title, item.id)}
         className="relative block shrink-0 grow-0 overflow-hidden border border-gray-400"
       >
         <CustomImage
@@ -73,7 +75,8 @@ export default function SingleNewsItem({
           </span>
         </h4>
         <Link
-          href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
+          title={item.title}
+          href={generateNewsUrl(item.categoryName, item.title, item.id)}
           className={cn(
             "line-clamp-3 font-semibold",
             elem == "big" ? "uppercase xl:text-lg" : "text-sm capitalize",

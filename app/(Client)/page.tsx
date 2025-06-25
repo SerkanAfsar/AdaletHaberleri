@@ -52,6 +52,8 @@ export const metadata: Metadata = {
 export default async function Page() {
   return (
     <>
+      <h1 className="hidden">Güncel Adalet ve Hukuk Haberleri</h1>
+      <h2 className="hidden">Güncel Hukuk Haberleri</h2>
       <HeroSlider />
       <NewsCategorySection />
       <MostReaded />

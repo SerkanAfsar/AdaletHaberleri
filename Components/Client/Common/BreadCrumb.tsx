@@ -20,7 +20,7 @@ export default function BreadCrumb({ items }: { items: BreadCrumbType[] }) {
             <li key={index} className="breadCrumbItem">
               <Link
                 href={item.url}
-                title="Anasayfa"
+                title={item.title}
                 dangerouslySetInnerHTML={{ __html: item.title }}
               ></Link>
               <ChevronRight />

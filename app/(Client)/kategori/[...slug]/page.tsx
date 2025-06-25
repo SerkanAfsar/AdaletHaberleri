@@ -93,6 +93,8 @@ export default async function Page({
           },
         ]}
       />
+      <h1 className="hidden">Güncel {data.categoryName} Haberleri</h1>
+      <h2 className="hidden">{data.categoryName} Haberleri</h2>
       <CategoryTitle item={{ title: data.categoryName! }} />
       <CategoryNewsWrapper>
         {data.Newses.map((newsItem, index) => {

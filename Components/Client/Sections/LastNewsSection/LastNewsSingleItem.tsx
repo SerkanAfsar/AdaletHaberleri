@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { CategoryNewsListSingleItemType } from "@/Types/Client.types";
-import { cn, dateFormat, slugUrl } from "@/Utils";
+import { cn, dateFormat, generateNewsUrl } from "@/Utils";
 import Link from "next/link";
 const CustomImage = dynamic(() => import("../../Common/CustomImage"));
 
@@ -13,7 +13,8 @@ export default function LastNewsSingleItem({
 }) {
   return (
     <Link
-      href={`/haberler/${slugUrl(item.categoryName)}/${slugUrl(item.title)}/${item.id}`}
+      title={item.title}
+      href={generateNewsUrl(item.categoryName, item.title, item.id)}
       className="relative mb-4 flex h-full w-full shrink-0 grow-0 flex-col gap-2 overflow-hidden"
     >
       <div

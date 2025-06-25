@@ -12,7 +12,11 @@ export default function HeaderMiddleSection() {
   return (
     <section className="block w-full bg-white">
       <div className="relative container mx-auto flex items-center justify-between py-3 xl:py-0">
-        <Link href={"/"} className="text-primary block text-lg font-bold">
+        <Link
+          title="Adalet Haberleri"
+          href={"/"}
+          className="text-primary block text-lg font-bold"
+        >
           ADALET HABERLERİ
         </Link>
         <HeaderMiddleNavSection />

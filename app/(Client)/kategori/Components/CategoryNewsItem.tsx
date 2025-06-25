@@ -27,6 +27,7 @@ export default function CategoryNewsItem({
           <figcaption className="hidden">{item?.title}</figcaption>
 
           <Link
+            title={item.title}
             className="absolute inset-0 indent-[-9999px] before:absolute before:inset-0 before:content-['']"
             href={generateNewsUrl(categoryName, item.title, item.id)}
           >

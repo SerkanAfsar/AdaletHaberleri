@@ -22,17 +22,17 @@ export default function HeaderTop() {
       <div className="flex-co container flex items-center justify-between">
         <ul className="flexCenter gap-3 font-semibold text-gray-600">
           <li>
-            <Link href={"/"} className="block py-3">
+            <Link title="Adalet Haberleri" href={"/"} className="block py-3">
               Anasayfa
             </Link>
           </li>
           <li>
-            <Link href={"/"} className="block py-3">
+            <Link title="Adalet Haberleri" href={"/"} className="block py-3">
               Hakkımızda
             </Link>
           </li>
           <li>
-            <Link href={"/"} className="block py-3">
+            <Link href={"/"} title="Adalet Haberleri" className="block py-3">
               İletişim
             </Link>
           </li>
