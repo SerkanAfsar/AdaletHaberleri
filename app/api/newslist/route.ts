@@ -9,6 +9,7 @@ export async function GET() {
     CacheNames.MenuList,
     CacheNames.LastFiveNews,
     CacheNames.LastSectionNews,
+    CacheNames.CategoryLastNews,
   ]);
   await revalidateCustomPath("/");
   return NextResponse.json(result);

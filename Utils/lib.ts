@@ -171,6 +171,8 @@ export const CacheNames = {
   MenuList: "MenuList",
   LastFiveNews: "LastFiveNews",
   MostReadedNews: "MostReadedNews",
+  News: "News",
+  CategoryLastNews: "CategoryLastNews",
 } as const;
 
 export const envVariables: EnvType = {

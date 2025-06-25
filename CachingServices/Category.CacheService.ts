@@ -27,8 +27,8 @@ export const GetHeaderBottomCategoryCacheService = cache(
 
 export const CategoryLastNewsResult = ({ id }: { id: number }) =>
   cache(GetCategoryDetailWithLastNews, [id.toString()], {
-    revalidate: 3600,
-    tags: ["CategoryLastNews"],
+    revalidate: 7200,
+    tags: [CacheNames.CategoryLastNews],
   });
 
 export const CategoryLastNewsCacheResult = async ({ id }: { id: number }) => {

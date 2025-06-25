@@ -9,7 +9,7 @@ import { CacheNames } from "@/Utils";
 import { unstable_cache as cache } from "next/cache";
 
 export const GetMenuListCacheService = cache(GetMenuListService, undefined, {
-  revalidate: 3600,
+  revalidate: 7200,
   tags: [CacheNames.MenuList],
 });
 
@@ -17,7 +17,7 @@ export const GetLastNewsMainPageCacheService = cache(
   LastNewsMainPageService,
   undefined,
   {
-    revalidate: 3600,
+    revalidate: 7200,
     tags: [CacheNames.LastSectionNews],
   },
 );
@@ -25,19 +25,19 @@ export const GetLastNewsMainPageCacheService = cache(
 export const GetLastFiveNewsCacheService = cache(
   GetLastFiveNewsService,
   undefined,
-  { revalidate: 3600, tags: [CacheNames.LastFiveNews] },
+  { revalidate: 7200, tags: [CacheNames.LastFiveNews] },
 );
 
 export const GetMostReadedCacheService = cache(
   GetMostReadedNewsService,
   undefined,
-  { revalidate: 3600, tags: [CacheNames.MostReadedNews] },
+  { revalidate: 7200, tags: [CacheNames.MostReadedNews] },
 );
 
 export const NewsDetailResult = ({ id }: { id: number }) =>
   cache(GetNewsDetailByIdService, [id.toString()], {
-    revalidate: 3000,
-    tags: ["News"],
+    revalidate: 7200,
+    tags: [CacheNames.News],
   });
 
 export const NewsDetailCacheService = async ({ id }: { id: number }) => {
