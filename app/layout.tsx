@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import NextTopLoader from "nextjs-toploader";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -51,6 +52,7 @@ export default function RootLayout({
             </Script>
           </>
         )}
+        <Analytics />
       </body>
     </html>
   );
