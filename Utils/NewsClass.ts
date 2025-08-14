@@ -73,6 +73,13 @@ export class NewsClass {
     if (!titleItem?.innerText) {
       return false;
     }
+    let imgId = null;
+    if (imgAlani && imgAlani.getAttribute("src")) {
+      imgId = await this.uploadImage(
+        title.trim(),
+        imgAlani.getAttribute("src") ?? "",
+      );
+    }
 
     await prisma.news.create({
       data: {
@@ -85,12 +92,7 @@ export class NewsClass {
         slugUrl: slugUrl(title)!,
         source: selector.source,
         sourceUrlLink: fetchUrl,
-        imageId: imgAlani?.getAttribute("src")
-          ? await this.uploadImage(
-              title.trim(),
-              imgAlani.getAttribute("src") ?? "",
-            )
-          : null,
+        imageId: imgId,
         categoryId: this.categoryId,
       },
     });
