@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const newsResult = await GetNewsListForSitemapService();
   for (const news of newsResult) {
     arr.push({
-      url: `${envVariables.NEXT_PUBLIC_BASE_URL}/${generateNewsUrl(news.Category!.categoryName, news.title, news.id)}`,
+      url: `${envVariables.NEXT_PUBLIC_BASE_URL}${generateNewsUrl(news.Category!.categoryName, news.title, news.id)}`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.8,
