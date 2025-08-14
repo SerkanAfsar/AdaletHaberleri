@@ -19,7 +19,7 @@ export default function LastNewsSingleItem({
     >
       <div
         className={cn(
-          "block w-full overflow-hidden",
+          "block h-[200px] w-full overflow-hidden",
           hasBorder && "border border-gray-200",
         )}
       >
@@ -30,7 +30,7 @@ export default function LastNewsSingleItem({
           style={{ width: "100%" }}
           title={item.title}
           keyField="medium"
-          className="hover object-cover object-center transition-all hover:scale-105"
+          className="hover h-full object-cover object-center transition-all hover:scale-105"
         />
       </div>
 
