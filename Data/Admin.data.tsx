@@ -80,7 +80,7 @@ export const SourceList: Record<string, SiteSelectors> = {
     subDescriptionSelector: `h2[itemprop="description"]`,
     baseUrl: "https://www.hukukihaber.net",
     source: "HUKUKIHABER",
-    imageSelector: ".card.border-0.mb-3 img",
+    imageSelector: ".card.border-0.mb-3.rounded-0 img",
   },
   ADALETBIZ: {
     name: "ADALET BİZ",
