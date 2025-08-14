@@ -87,6 +87,12 @@ body {
   @apply m-0 min-h-screen p-0;
   font-family: var(--font-inter);
 }
+body {
+  @apply flex flex-col;
+}
+main {
+  @apply flex-1;
+}
 @layer base {
   h1,
   h2,

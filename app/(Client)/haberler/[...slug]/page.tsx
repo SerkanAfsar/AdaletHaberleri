@@ -76,25 +76,6 @@ export default async function Page({
 
   return (
     <>
-      {/* <BreadCrumb
-        items={[
-          {
-            title: data.Category!.categoryName,
-            url: generateCategoryUrl(
-              data.Category!.categoryName,
-              data.Category!.id,
-            ),
-          },
-          {
-            title: data.title,
-            url: generateNewsUrl(
-              data.Category!.categoryName,
-              data.title,
-              data.id,
-            ),
-          },
-        ]}
-      /> */}
       <section className="container mx-auto flex w-full flex-col gap-3 py-6 xl:flex-row">
         <NewsDetailSection
           className="flex-auto grow-0 xl:flex-2/3"
