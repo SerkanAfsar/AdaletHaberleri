@@ -81,21 +81,25 @@ export class NewsClass {
       );
     }
 
-    await prisma.news.create({
-      data: {
-        title: titleItem?.innerText,
-        subDescription: descriptionItem?.innerText,
-        content: articleBodyItem?.innerHTML,
-        seoTitle: titleItem.innerText,
-        seoDescription: titleItem.innerText,
-        readedCount: 1,
-        slugUrl: slugUrl(title)!,
-        source: selector.source,
-        sourceUrlLink: fetchUrl,
-        imageId: imgId,
-        categoryId: this.categoryId,
-      },
-    });
+    try {
+      await prisma.news.create({
+        data: {
+          title: titleItem?.innerText,
+          subDescription: descriptionItem?.innerText,
+          content: articleBodyItem?.innerHTML,
+          seoTitle: titleItem.innerText,
+          seoDescription: titleItem.innerText,
+          readedCount: 1,
+          slugUrl: slugUrl(title)!,
+          source: selector.source,
+          sourceUrlLink: fetchUrl,
+          imageId: imgId,
+          categoryId: this.categoryId,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private async fetchPageData(url: string) {
@@ -114,8 +118,11 @@ export class NewsClass {
       return null;
     }
 
+    console.log(imagePath);
+
     const imageFetchResponse = await fetch(imagePath);
     if (!imageFetchResponse.ok) {
+      console.log(imageFetchResponse.status);
       return null;
     }
 
