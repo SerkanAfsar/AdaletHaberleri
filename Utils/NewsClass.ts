@@ -133,18 +133,15 @@ export class NewsClass {
     form.append("file", file);
     form.append("requireSignedURLs", "false");
 
-    const response = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${envVariables.NEXT_PUBLIC_CDN_ACCOUNT_ID}/images/v1`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${envVariables.NEXT_PUBLIC_CDN_ACCOUNT_TOKEN}`,
-        },
-        body: form,
-      },
-    );
+    const url = `https://api.cloudflare.com/client/v4/accounts/${envVariables.NEXT_PUBLIC_CDN_ACCOUNT_ID}/images/v1`;
 
-    console.log("response status is", response.status);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${envVariables.NEXT_PUBLIC_CDN_ACCOUNT_TOKEN}`,
+      },
+      body: form,
+    });
 
     if (response.ok) {
       const data: CloudFlareResponseType = await response.json();
