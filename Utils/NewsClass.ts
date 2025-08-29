@@ -143,6 +143,8 @@ export class NewsClass {
       body: form,
     });
 
+    console.log("response status is", response.status);
+
     if (response.ok) {
       const data: CloudFlareResponseType = await response.json();
       if (!data.success) {
