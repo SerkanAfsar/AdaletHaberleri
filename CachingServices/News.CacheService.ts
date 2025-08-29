@@ -42,7 +42,7 @@ export const NewsDetailResult = ({ id }: { id: number }) =>
   });
 
 export const NewsDetailCacheService = async ({ id }: { id: number }) => {
-  await IncreaseReadedCountService({ id });
+  // await IncreaseReadedCountService({ id });
   const cacheFunc = NewsDetailResult({ id });
   const result = await cacheFunc({ id });
   return result;
