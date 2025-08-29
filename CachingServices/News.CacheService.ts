@@ -2,6 +2,7 @@ import {
   GetLastFiveNewsService,
   GetMostReadedNewsService,
   GetNewsDetailByIdService,
+  IncreaseReadedCountService,
   LastNewsMainPageService,
 } from "@/Services";
 import { GetMenuListService } from "@/Services/MainPageService";
@@ -41,6 +42,7 @@ export const NewsDetailResult = ({ id }: { id: number }) =>
   });
 
 export const NewsDetailCacheService = async ({ id }: { id: number }) => {
+  await IncreaseReadedCountService({ id });
   const cacheFunc = NewsDetailResult({ id });
   const result = await cacheFunc({ id });
   return result;

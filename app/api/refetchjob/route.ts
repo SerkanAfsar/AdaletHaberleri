@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const response = await fetch(envVariables.NEXT_PUBLIC_BASE_URL);
-  console.log(response);
 
   return NextResponse.json({ message: "success" }, { status: 200 });
 }

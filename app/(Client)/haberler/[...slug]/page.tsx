@@ -1,4 +1,4 @@
-import { Deneme } from "@/Services";
+import { Deneme, IncreaseReadedCountService } from "@/Services";
 import { notFound } from "next/navigation";
 import NewsDetailLastNewsList from "../Components/NewsDetailLastNewsList";
 import NewsDetailSection from "../Components/NewsDetailSection";

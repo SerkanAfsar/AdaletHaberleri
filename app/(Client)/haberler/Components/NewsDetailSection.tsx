@@ -1,5 +1,5 @@
 import CustomImage from "@/Components/Client/Common/CustomImage";
-import { Deneme } from "@/Services";
+import { Deneme, IncreaseReadedCountService } from "@/Services";
 import { cn } from "@/Utils";
 
 export default async function NewsDetailSection({
@@ -12,7 +12,7 @@ export default async function NewsDetailSection({
   if (!data) {
     return null;
   }
-  // await IncreaseReadedCountService({ id: data.id });
+  await IncreaseReadedCountService({ id: data.id });
 
   const readableDate = new Date(data.createdAt).toLocaleDateString("tr-TR", {
     year: "numeric",

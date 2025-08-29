@@ -119,7 +119,7 @@ export class NewsClass {
     }
 
     const imageFetchResponse = await fetch(imagePath);
-    console.log("img fetch response status", imageFetchResponse.status);
+
     if (!imageFetchResponse.ok) {
       return null;
     }
@@ -142,8 +142,6 @@ export class NewsClass {
       },
       body: form,
     });
-
-    console.log("response status is", response.status);
 
     if (response.ok) {
       const data: CloudFlareResponseType = await response.json();
