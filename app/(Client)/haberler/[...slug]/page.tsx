@@ -66,13 +66,15 @@ export default async function Page({
   }
 
   const result = await NewsDetailCacheService({ id });
-  if (result.error) {
-    return <div>{result.error}</div>;
-  }
-  const data = result.data as Deneme;
-  if (!data) {
+
+  if (result.statusCode == 404 || !result.data) {
     return notFound();
   }
+
+  if (result.error) {
+    throw new Error(result.error || "Err");
+  }
+  const data = result.data as Deneme;
 
   return (
     <>

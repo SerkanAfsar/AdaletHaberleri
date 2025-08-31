@@ -38,11 +38,10 @@ export const GetMostReadedCacheService = cache(
 export const NewsDetailResult = ({ id }: { id: number }) =>
   cache(GetNewsDetailByIdService, [id.toString()], {
     revalidate: 7200,
-    tags: [CacheNames.News],
+    tags: [CacheNames.News, id.toString()],
   });
 
 export const NewsDetailCacheService = async ({ id }: { id: number }) => {
-  // await IncreaseReadedCountService({ id });
   const cacheFunc = NewsDetailResult({ id });
   const result = await cacheFunc({ id });
   return result;

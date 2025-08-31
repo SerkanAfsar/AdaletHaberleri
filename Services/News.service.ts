@@ -1,4 +1,4 @@
-import { revalidateCustomTags } from "@/Actions";
+"use server";
 import { NewsListType } from "@/app/(Admin)/Admin/News/Containers/NewsContainer";
 import {
   CloudFlareResponseType,
@@ -16,6 +16,7 @@ import prisma from "@/Utils/db";
 import { NewsClass } from "@/Utils/NewsClass";
 import { Category, News, Prisma } from "@prisma/client";
 import { ColumnFiltersState, SortingState } from "@tanstack/react-table";
+import { revalidateTag } from "next/cache";
 
 export const GetCategoryNewsListWithCategorySources = async () => {
   const categoryList = await prisma.category.findMany({
@@ -427,7 +428,12 @@ export const IncreaseReadedCountService = async ({ id }: { id: number }) => {
     if (!result) {
       throw new Error("News Not Found");
     }
-    await revalidateCustomTags([CacheNames.MostReadedNews]);
+
+    await Promise.all(
+      [CacheNames.MostReadedNews, CacheNames.News, id.toString()].map((tag) =>
+        revalidateTag(tag),
+      ),
+    );
 
     const responseResult: ResponseResult<News> = {
       data: result,

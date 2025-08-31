@@ -1,18 +1,23 @@
+"use client";
 import CustomImage from "@/Components/Client/Common/CustomImage";
 import { Deneme, IncreaseReadedCountService } from "@/Services";
 import { cn } from "@/Utils";
+import { useEffect } from "react";
 
-export default async function NewsDetailSection({
+export default function NewsDetailSection({
   data,
   className,
 }: {
   data: Deneme;
   className: string;
 }) {
-  if (!data) {
-    return null;
-  }
-  await IncreaseReadedCountService({ id: data.id });
+  useEffect(() => {
+    const deneme = async () => {
+      const result = await IncreaseReadedCountService({ id: data.id });
+      console.log(result);
+    };
+    deneme();
+  }, []);
 
   const readableDate = new Date(data.createdAt).toLocaleDateString("tr-TR", {
     year: "numeric",

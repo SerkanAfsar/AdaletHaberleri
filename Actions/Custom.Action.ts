@@ -21,9 +21,7 @@ export async function revalidateCustomPath(path: string = "/") {
 }
 
 export async function revalidateCustomTags(tags: string[]) {
-  for (const tag of tags) {
-    revalidateTag(`${tag}`);
-  }
+  await Promise.all(tags.map((tag) => revalidateTag(tag)));
 }
 
 export async function ExitPanel() {
